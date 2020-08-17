@@ -82,7 +82,9 @@ int _write(int file, char *ptr, int len)
 int fputc(int ch, FILE * f)		// Keil
 {
 	addDebugBuffer(ch);
-	__HAL_UART_ENABLE_IT(&PORT, UART_IT_TXE);
+	if(huart1.Instance == USART1){		// waiting for usart1 initalization. so that printf can be used before usart really work.
+		__HAL_UART_ENABLE_IT(&PORT, UART_IT_TXE);
+	}
 	return ch;
 }
 

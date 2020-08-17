@@ -33,7 +33,7 @@ void MX_ADC1_Init(void)
   hadc1.Init.NbrOfConversion = 1;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
-    Error_Handler();
+    Error_Handler()
   }
   /** Configure Regular Channel
   */
@@ -42,7 +42,7 @@ void MX_ADC1_Init(void)
   sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
-    Error_Handler();
+    Error_Handler()
   }
 }
 
@@ -68,7 +68,7 @@ void MX_ADC2_Init(void)
   hadc2.Init.NbrOfConversion = 1;
   if (HAL_ADC_Init(&hadc2) != HAL_OK)
   {
-    Error_Handler();
+    Error_Handler()
   }
   /** Configure Regular Channel
   */
@@ -77,7 +77,7 @@ void MX_ADC2_Init(void)
   sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
   if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
   {
-    Error_Handler();
+    Error_Handler()
   }
 
 }
@@ -104,7 +104,7 @@ void MX_ADC2_Init(void)
   hadc3.Init.NbrOfConversion = 1;
   if (HAL_ADC_Init(&hadc3) != HAL_OK)
   {
-    Error_Handler();
+    Error_Handler()
   }
   /** Configure Regular Channel
   */
@@ -113,7 +113,7 @@ void MX_ADC2_Init(void)
   sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
   if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
   {
-    Error_Handler();
+    Error_Handler()
   }
 }
 

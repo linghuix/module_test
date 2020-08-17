@@ -223,8 +223,8 @@ void TIM1_TRG_COM_IRQHandler(void)
 */
 void USART1_IRQHandler(void)
 {
-	HAL_UART_IRQHandler(&huart1);
-	//debug_IRQ();
+	//HAL_UART_IRQHandler(&huart1);
+	debug_IRQ();
 }
 
 

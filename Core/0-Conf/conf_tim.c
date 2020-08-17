@@ -248,8 +248,8 @@ void MX_TIM3_Init(void)
 
 void MX_TIM_CounterInterrupt(TIM_TypeDef * TIM, uint32_t Hz, uint32_t maxCount)	//TIM miu_s
 {
-	if(TIM == TIM2){
-		TIMx_CountSet(TIM2, Hz, maxCount);
+
+		TIMx_CountSet(TIM, Hz, maxCount);
 //		HAL_TIM_MspPostInit(&htim2);
 //		sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
 //		sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
@@ -257,7 +257,7 @@ void MX_TIM_CounterInterrupt(TIM_TypeDef * TIM, uint32_t Hz, uint32_t maxCount)	
 //		{
 //			Error_Handler()
 //		}
-	}
+
 }
 
 
@@ -322,6 +322,20 @@ void MX_TIM_CaptureInterrupt(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
  * Window > Preferences > C/C++ > Editor > Templates.
  */
 
+
+/**
+  * @brief  Timer PWM output configuration
+  * @param  Select TIM device
+  * @param  Hz. PWM
+  * @param  Alignment Specifies the data alignment.
+  *          This parameter can be one of the following values:
+  *            @arg DAC_ALIGN_8B_R: 8bit right data alignment selected
+  *            @arg DAC_ALIGN_12B_L: 12bit left data alignment selected
+  *            @arg DAC_ALIGN_12B_R: 12bit right data alignment selected
+  * @param  Data Data to be loaded in the selected data holding register.
+  * @retval HAL status
+  */
+
 void MX_TIM_PWMOUT(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
 {
 	TIM_PWMSet(TIM, Hz, period);
@@ -340,6 +354,7 @@ void TIMx_CountSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)	//TIM miu_s
 {
 	if(TIM == TIM2){
 		htim2.Instance = TIM2;
+		htim2.Init.ClockDivision = 0;
 		htim2.Init.Prescaler = HAL_RCC_GetPCLK2Freq()/Hz;//APB1 1MHz
 		htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
 		htim2.Init.Period = period;
@@ -349,8 +364,15 @@ void TIMx_CountSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)	//TIM miu_s
 		}
 	}
 	else if(TIM == TIM4){
+
 		htim4.Instance = TIM4;
-		htim4.Init.Prescaler = HAL_RCC_GetPCLK2Freq()/Hz;//APB1 1MHz
+		if(HAL_RCC_GetHCLKFreq()/HAL_RCC_GetPCLK1Freq() == 1)
+			htim4.Init.Prescaler = HAL_RCC_GetPCLK1Freq()/Hz;//APB1 1MHz
+		else{
+			htim4.Init.Prescaler = HAL_RCC_GetPCLK1Freq()*2/Hz;
+		}
+		MSG("TIM4 max frequency %d MHz\r\n", htim4.Init.Prescaler*Hz/1000000);
+		
 		htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
 		htim4.Init.Period = period;
 		htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;/*!< TIMx_ARR register is not buffered */
@@ -394,7 +416,7 @@ static void MX_TIM_SlaveSet(TIM_TypeDef * TIM)
   * @retval HAL status
   */
 
-static void MX_TIM_MasterSet(TIM_TypeDef * TIM, uint32_t TriggerMode)
+void MX_TIM_MasterSet(TIM_TypeDef * TIM, uint32_t TriggerMode)
 {
 	TIM_MasterConfigTypeDef sMasterConfig = {0};
 	if(TIM == TIM4){
@@ -417,7 +439,6 @@ void TIM_PWMSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
 		if (HAL_TIM_PWM_Init(&htim4) != HAL_OK){
 			Error_Handler()
 		}
-
 		sConfigOC.OCMode = TIM_OCMODE_PWM1;
 		sConfigOC.Pulse = 10;						// OCPolarity duration  高电平时间 Pulse/period*(1000/Hz) ms
 		sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
@@ -425,7 +446,7 @@ void TIM_PWMSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
 		if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK){
 			Error_Handler()
 		}
-		HAL_TIM_MspPostInit(&htim4);
+		//HAL_TIM_MspPostInit(&htim4);
 	}
 }
 
@@ -459,6 +480,7 @@ void TIM_CaputureChannel(TIM_TypeDef * TIM, uint32_t triger, uint32_t Channel)
 
 
 
+
 void MX_TIMx_Interrupt(TIM_TypeDef * TIM, uint32_t period)	//TIM miu_s
 {
 	TIM_MasterConfigTypeDef sMasterConfig;
@@ -484,8 +506,8 @@ void MX_TIMx_Interrupt(TIM_TypeDef * TIM, uint32_t period)	//TIM miu_s
 }
 
 
-void MX_TIM_CLK(TIM_HandleTypeDef* tim_baseHandle);
-void MX_NVIC(TIM_HandleTypeDef* tim_baseHandle);
+static void MX_TIM_CLK(TIM_HandleTypeDef* tim_baseHandle);
+static void MX_NVIC(TIM_HandleTypeDef* tim_baseHandle);
 /*
  * author lhx
  * Apr 8, 2020
@@ -516,6 +538,12 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
 
 }
 
+
+/**
+  * @brief  TIM clock enable
+  * @param  TIM device
+  */
+
 void MX_TIM_CLK(TIM_HandleTypeDef* tim_baseHandle)
 {
   if(tim_baseHandle->Instance==TIM1)
@@ -536,15 +564,23 @@ void MX_TIM_CLK(TIM_HandleTypeDef* tim_baseHandle)
   }
 }
 
-void MX_NVIC(TIM_HandleTypeDef* tim_baseHandle)
+
+/**
+  * @brief  configure the NVIC interrupt IO
+  * @param  TIM device
+  */
+
+static void MX_NVIC(TIM_HandleTypeDef* tim_baseHandle)
 {
 	if(tim_baseHandle->Instance==TIM1){
 		HAL_NVIC_SetPriority(TIM1_UP_IRQn, 1, 2);
 		HAL_NVIC_EnableIRQ(TIM1_UP_IRQn);
-//	    HAL_NVIC_SetPriority(TIM1_BRK_IRQn, 0, 0);
-//	    HAL_NVIC_EnableIRQ(TIM1_BRK_IRQn);
-//	    HAL_NVIC_SetPriority(TIM1_TRG_COM_IRQn, 0, 0);
-//	    HAL_NVIC_EnableIRQ(TIM1_TRG_COM_IRQn);
+		
+	    HAL_NVIC_SetPriority(TIM1_BRK_IRQn, 0, 0);
+	    HAL_NVIC_EnableIRQ(TIM1_BRK_IRQn);
+	    HAL_NVIC_SetPriority(TIM1_TRG_COM_IRQn, 0, 0);
+		
+	    HAL_NVIC_EnableIRQ(TIM1_TRG_COM_IRQn);
 	    HAL_NVIC_SetPriority(TIM1_CC_IRQn, 0, 0);
 	    HAL_NVIC_EnableIRQ(TIM1_CC_IRQn);
 	}
@@ -618,7 +654,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
     PD8     ------> TIM4_CH2
     PD9     ------> TIM4_CH1 
     */
-		__HAL_RCC_GPIOB_CLK_ENABLE();
+	__HAL_RCC_GPIOB_CLK_ENABLE();
     GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_8|GPIO_PIN_7|GPIO_PIN_6;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;

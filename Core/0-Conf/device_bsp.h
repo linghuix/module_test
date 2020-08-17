@@ -13,10 +13,12 @@
 #include "stdio.h"
 #include "math.h"
 
+#include "debug.h"
+
 #define TEST void
 #define TEST_ON
 
 
-#define Error_Handler() while(1);
+#define Error_Handler() ERROR(3,"init error!"); while(1);
 
 #endif /* BSP_DEVICE_BSP_H_ */

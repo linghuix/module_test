@@ -218,7 +218,7 @@ void test_time_interrupt(void)
 	MX_USART1_UART_Init();
 	MSG("USART1_UART_Init\r\n");
 	
-	MX_TIMx_Interrupt(TIM2, 1000);//1ms������
+	MX_TIM_CounterInterrupt(TIM2, 1000, 100);
 	HAL_TIM_Base_Start_IT(&htim2);
 	
 	beep_init();

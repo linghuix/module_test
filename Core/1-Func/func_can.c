@@ -27,11 +27,11 @@ Error MX_CANx_get(CAN_HandleTypeDef *phcan, CanRxMsg *msg, uint32_t FIFO)
 
 void CAN_Start(CAN_HandleTypeDef *phcan)
 {
-	MSG_BSTART("CAN");
+	MSG_BSTART("CAN", "start");
 	if(HAL_CAN_Start(phcan) != HAL_OK){
 		Error_Handler()
 	}
-	MSG_ASTART("CAN");
+	MSG_ASTART("CAN", "start");
 }
 
 

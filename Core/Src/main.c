@@ -12,7 +12,7 @@ int main(void)
 #ifdef TEST_ON
 	
 	printf("beginning\r\n");
-	Single_DAC_Output_16_to_8();
+	Dual_DAC_Tri_Output();
 	/*ForceCollector_test();*/
 	/*systemTimer_init();
 	debug_init();*/

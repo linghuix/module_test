@@ -14,6 +14,8 @@
 
 void SystemClock_Config(void)
 {
+  MSG("Asuming External High Osc = 8MHz \r\n");
+
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
@@ -29,7 +31,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    Error_Handler();
+    Error_Handler()
   }
   /** Initializes the CPU, AHB and APB busses clocks 
   */
@@ -42,8 +44,13 @@ void SystemClock_Config(void)
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
-    Error_Handler();
+    Error_Handler()
   }
+  
+  MSG("SysClock frequency %d MHz\r\n", HAL_RCC_GetSysClockFreq()/1000000);
+  MSG("AHB frequency %d MHz\r\n", HAL_RCC_GetHCLKFreq()/1000000);
+  MSG("APB1 frequency %d MHz\r\n", HAL_RCC_GetPCLK1Freq()/1000000);
+  MSG("APB2 frequency %d MHz\r\n", HAL_RCC_GetPCLK2Freq()/1000000);
 }
 
 /*
@@ -109,8 +116,8 @@ void Flash_prefetch(void){
 
 
 
-void Core_Config(void){
-
+void Core_Config(void)
+{
 	Flash_prefetch();
 	NVIC_Init(NVIC_PRIORITYGROUP_2);
 	SystemClock_Config();

@@ -9,8 +9,8 @@
 #define PORT huart1
 
 
-//#define BUFF_Printf
-#define NO_BUFF_Printf
+#define BUFF_Printf
+//#define NO_BUFF_Printf
 #define KEIL
 
 
@@ -54,8 +54,8 @@
 /**
   * @brief  Before and after start.
   */
-# define MSG_BSTART(...) 	MSG( __VA_ARGS__ );printf("waiting for start ... \r\n");
-# define MSG_ASTART(...) 	MSG( __VA_ARGS__ );printf("start ! \r\n");
+# define MSG_BSTART(device, action) 	MSG( device );printf(" waiting for ");printf(action);printf(" ...\r\n");
+# define MSG_ASTART(device, action) 	MSG( device );printf(" already ");printf(action);printf("\r\n");
 
 
 #define MSG_deviceTest(...) 	MSG(__VA_ARGS__)

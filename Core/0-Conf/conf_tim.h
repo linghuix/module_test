@@ -30,12 +30,15 @@ void MX_TIM12_Init(void);
 
 
 void MX_TIMx_Interrupt(TIM_TypeDef * TIM, uint32_t period);
-void MX_TIM_CounterInterrupt(TIM_TypeDef * TIM, uint32_t Prescale, uint32_t maxCount);
+void MX_TIM_CounterInterrupt(TIM_TypeDef * TIM, uint32_t Hz, uint32_t maxCount);
 void MX_TIM_CaptureInterrupt(TIM_TypeDef * TIM, uint32_t unit, uint32_t period);
 void TIM_CaputureChannel(TIM_TypeDef * TIM, uint32_t triger, uint32_t Channel);
 //void MX_TIM4_PWMOUT_Init(void);
 void MX_TIM_PWMOUT(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period);
 
+
+void MX_TIM_MasterSet(TIM_TypeDef * TIM, uint32_t TriggerMode);
+	
 
 
 /* 硬件底层操作操作 */
