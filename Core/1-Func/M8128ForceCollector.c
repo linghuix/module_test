@@ -1,13 +1,34 @@
 #include "M8128ForceCollector.h"
-#define Force_Collect_TEST
+
+
+/**
+  ******************************************************************************
+  * @file    stm32f1xx_hal_can.c
+  * @author  MCD Application Team
+  * @brief   CAN HAL module driver.
+  *          This file provides firmware functions to manage the following
+  *          functionalities of the Controller Area Network (CAN) peripheral:
+  *           + Initialization and de-initialization functions
+  *           + Configuration functions
+  *           + Control functions
+  *           + Interrupts management
+  *           + Callbacks functions
+  *           + Peripheral State and Error functions
+  *
+  @verbatim
+  */
+
+
+//#define Force_Collect_TEST
 
 #define FORCENUMMAX 27
 
 uint8_t force[FORCENUMMAX];	// force raw data(hex of float) store 
-float measureForce[6];		// force data store
+//float measureForce[6];		// force data store
 CanTxMsg ForceCommand;		// command can frame
 CanRxMsg ForceData;			// raw data can frame
 
+struct ForceBuffer forceBuffer = {{0.0},0,0};	// force data store buffer.
 
 //---------------------------------------------------------
 // Brief - break the string into 8-byte packages and send ASCII of them through CAN frame. BIG-END Mode
@@ -39,6 +60,12 @@ void SendString (char * str)
 	}
 }
 
+/**
+  * @brief  Init Force collector beforce measure force data. 
+  *         1. initalize and start CAN device
+  *         2. initalize global variable 
+  *         3. initalize sample frequency
+  */
 
 void ForceCollector_Init (void)
 {
@@ -54,11 +81,14 @@ void ForceCollector_Init (void)
 	ForceCommand.head.RTR = CAN_RTR_DATA;
 	ForceCommand.head.IDE = CAN_ID_STD;
 	
-	char ForceStartCommand[] = "AT+SMPF=1000\r\n";
+	char ForceStartCommand[] = "AT+SMPF=500\r\n";
 	SendString (ForceStartCommand);
 }
 
 
+/**
+  * @brief  Send force collect start command.
+  */
 
 void StartCollect (void)
 {	
@@ -66,7 +96,9 @@ void StartCollect (void)
 	SendString (ForceStartCommand);
 }
 
-
+/**
+  * @brief  Send force collect stop command.
+  */
 void StopCollect (void)
 {	
 	char ForceStartCommand[] = "AT+GSD=STOP\r\n";
@@ -74,13 +106,12 @@ void StopCollect (void)
 }
 
 
-struct ForceBuffer forceBuffer = {{0.0},0,0};
+
 /*
  * author lhx
  * May 13, 2020
  *
- * @brief : put data to buffer, buffer is FULL return 0.
- * Window > Preferences > C/C++ > Editor > Templates.
+ * @brief : put data to force Buffer, IF buffer is FULL return 0.
  */
 uint8_t addForceBuffer(float data)
 {
@@ -91,6 +122,13 @@ uint8_t addForceBuffer(float data)
 	return 1;
 }
 
+/**
+  * @brief  Calculate the average of the data in the force Buffer
+  * @param  hdac pointer to a DAC_HandleTypeDef structure that contains
+  *         the configuration information for the specified DAC.
+  * @retval HAL status
+  */
+
 float AvgForceBuffer(void)
 {
 	float sum = 0;
@@ -100,14 +138,72 @@ float AvgForceBuffer(void)
 	return sum/ForceBufferSize;
 }
 
-uint32_t n=0;		// num order of force data
-float Offset=0;
+/**
+ * @brief: get the index-1 postion in queue. 
+ */
+
+uint16_t getPreviousIndex(uint16_t index)
+{
+
+	uint16_t previous;
+	if((uint16_t)(index-1) > index) {
+		previous = (ForceBufferSize-1);
+	}
+	else{
+		previous = (index-1);
+	}
+	//MMSG("index=%d previous=%d\r\n", index, previous);
+	return previous;
+}
+
+
+/**
+  * @brief  Add data weighted by previous data as a online filter.
+  * @param  row force data
+  *         the configuration information for the specified DAC.
+  * @call : getPreviousIndex()
+  * @retval 1
+  */
+
+uint8_t addWeightingForceBuffer(float data)
+{
+	uint16_t previous = getPreviousIndex(forceBuffer.in);
+	uint16_t pprevious = getPreviousIndex(previous);
+	uint16_t ppprevious = getPreviousIndex(pprevious);
+	forceBuffer.data[forceBuffer.in] = 0.5*data+0.2*forceBuffer.data[previous]+0.2*forceBuffer.data[pprevious]+0.1*forceBuffer.data[ppprevious];
+	forceBuffer.in = (forceBuffer.in + 1)%ForceBufferSize;
+	return 1;
+}
+
+
+uint32_t n=0;		// number order of force data. increment in the function
+float Offset=0;		// Offset value at zero external force 
+/**
+  * @brief  Calcuate the offset at n = OffsetWindowsPosition
+  * @retval Offset
+  */
+#define OffsetWindowsPosition 1000
 float GetOffset(void)
 {
-	if(n == 200){
+	
+	if(n == OffsetWindowsPosition){
 		Offset += AvgForceBuffer();
+		printf("------------------ offset get --------------------\r\n");
 	}
+
 	return Offset;
+}
+
+
+/**
+  * @brief  get the latest store weighted data which is filtered in addWeightingForceBuffer function.
+  * @call : getPreviousIndex
+  * @retval latest store weighted force data
+  */
+
+float getfilteredForce(void)
+{
+	return forceBuffer.data[getPreviousIndex(forceBuffer.in)] - Offset;
 }
 
 
@@ -135,9 +231,27 @@ TEST SendString_test(void)
 TEST ForceCollector_test(void)
 {
 	ForceCollector_Init();
+	StopCollect();
+	HAL_Delay(20);
 	StartCollect();
 }
-	
+
+
+TEST ForceCollectExperiment(void)
+{
+	ForceCollector_Init();
+	StopCollect();
+	HAL_Delay(20);
+	StartCollect();
+
+}
+
+
+/**
+  * @brief  CAN callback function in interrupt service.
+  * @param  hcan pointer to a CAN_HandleTypeDef structure that contains
+  *         the configuration information for the specified CAN.
+  */
 
 uint8_t OneframeDetected = 0;
 uint16_t ordernum, dataLength,forceIndex = 0;
@@ -171,21 +285,24 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 			printf("%d-%d\t",n,ordernum);
 			float * f;
 			int data;
-			for(uint8_t j=5;j<6;j++){
+//			for(uint8_t j=5;j<6;j++){
+			for(uint8_t j=2;j<3;j++){
 				data = force[4*j] | force[4*j+1]<<8 | force[4*j+2]<<16 | force[4*j+3]<<24;
 				f = (float*) &data;
-				if(j==5){
-					addForceBuffer(*f);
+				if(j==2){
+//					addForceBuffer(*f);
+					addWeightingForceBuffer(*f);
+					printf("%.5f\t", getfilteredForce());
 				}
 //				measureForce[j] = *f;
 //				printf("%.2f=%X\t", *f, data);
-				printf("%.1f\t", *f);
-				printf("%.2f\t", AvgForceBuffer()-GetOffset());
-				printf("offset%.3f", GetOffset());
+				//printf("%.1f\t", *f);
+//				printf("%.2f\t", AvgForceBuffer()-GetOffset());
+//				printf("offset%.3f", GetOffset());
 			}
 			printf("\r\n");
 			OneframeDetected = 0;
-			
+			GetOffset();
 			++n;
 			
 			/*if(++n >= 10){

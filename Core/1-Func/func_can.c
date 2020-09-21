@@ -98,6 +98,7 @@ void CAN_Rcv_test(void)
 	while(1){
 	}
 }
+
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 	if (HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0)>0) {

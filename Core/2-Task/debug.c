@@ -3,6 +3,7 @@
 */
 #include "debug.h"
 
+//#define DEBUG_TEST
 
 //G T R Vt
 
@@ -131,8 +132,7 @@ void debug_init(void)
  * author lhx
  * May 13, 2020
  *
- * @brief : 中断处理函数
- * Window > Preferences > C/C++ > Editor > Templates.
+ * @brief : interrupt service function
  */
 
 void debug_IRQ(void)
@@ -168,10 +168,11 @@ void debug_IRQ(void)
   ******************************************************************************
   */
 //@@@@@@@@@@@@@T@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test
+#ifdef DEBUG_TEST
 
 	#include "main.h"
 
-	TEST test_SpeedOfBuffer_printf(void)
+	void test_SpeedOfBuffer_printf(void)
 	{
 		Core_Config();
 		tick_init(1000000);
@@ -188,29 +189,47 @@ void debug_IRQ(void)
 		}
 	}
 
-	uint8_t test_buffRX[10];
-	TEST test_printf(void)
+	/**
+      * @brief  Test the function of the uart receive and transmit.
+      * @note pay attention to that 
+	  *		  debug must define NO_BUFF_Printf in debug.h 
+	  *		  AND CANNOT USE MSG for it can only used in BUFF_Printf
+	  * 	  USART1 interrupt must be use HAL_UART_IRQHandler(&huart1);
+	  *       In theory, we can use scanf() but we haven't achieve this.
+	  *		  
+      */
+    
+	uint8_t test_buffRX[20];
+	uint8_t test_buffTX[100];
+	void test_printf(void)
 	{
-		Core_Config();
-		debug_init();
+//		Core_Config();
+//		debug_init();
 
 		uint8_t test_data[] = "hello word!\r\n";
 		HAL_UART_Transmit_IT(&huart1, test_data, sizeof(test_data));
-		HAL_Delay(2);
-		
-		/* */
-		MSG_WAR(1,"send success", 54);
-	
+		HAL_Delay(200);	//wait for transmit finish.
+			
 
-		/*scanf��printf*/
-		MSG("test scanf ... \r\nplease enter a num");
+		/*scanf printf*/
+		uint8_t test_data1[] = "test scanf ... \r\nplease enter a num \r\n";
+		HAL_UART_Transmit_IT(&huart1, test_data1, sizeof(test_data1));
 		int x = 365;
-	  scanf("%d",&x);
-		printf("receive : %d\r\n",x);
-
+		HAL_Delay(1000);	//wait for transmit finish.
+//		scanf("%d",&x);
+		
+		sprintf((char *)test_buffTX, "receive : %d\r\n",x);
+		HAL_UART_Transmit_IT(&huart1, test_buffTX, sizeof(test_buffTX));
+		HAL_Delay(200);	
+		
 		/*IT*/
-		MSG("please input one hex data\r\n");
-		MSG("it will return 0x0A, that is the last char when you input to scanf function\r\n");
+		sprintf((char *)test_buffTX,"please input one hex data\r\n");
+		HAL_UART_Transmit_IT(&huart1, test_buffTX, sizeof(test_buffTX));
+		HAL_Delay(200);	
+		sprintf((char *)test_buffTX,"it will return 0x0A, that is the last char when you input to scanf function\r\n");
+		HAL_UART_Transmit_IT(&huart1, test_buffTX, sizeof(test_buffTX));
+		HAL_Delay(200);	
+		
 		for(int i; i<10; i++){
 			test_buffRX[i] = i;
 		}
@@ -224,8 +243,8 @@ void debug_IRQ(void)
 		for(int i=0; i<2 ; i++){
 			msg[i] = test_buffRX[i];
 		}
-			HAL_UART_Transmit_IT(&huart1, msg, 2);
-			HAL_UART_Receive_IT(&huart1, test_buffRX, 2);
+		HAL_UART_Transmit_IT(&huart1, msg, 2);
+		HAL_UART_Receive_IT(&huart1, test_buffRX, 2);
 	}
 	
 	
@@ -235,4 +254,4 @@ void debug_IRQ(void)
 			test_RXTX_callback();
 		}
 	}
-
+#endif

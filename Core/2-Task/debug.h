@@ -17,7 +17,7 @@
 
 /* Definition of error and warning macros */
 /* -------------------------------------- */
-#	define MSG(...) printf (__VA_ARGS__)
+#	define MSG(...) 	printf (__VA_ARGS__)
 
 
 /* Definition of MSG_ERR */
@@ -49,7 +49,7 @@
 #define SYNC_MSG(...)			//MSG(__VA_ARGS__)
 #define ROW_MSG(...)			MSG(__VA_ARGS__)	
 #define ERROR(s,...)			printf("#ERROR %d# ",s);MSG(__VA_ARGS__);printf("\t--%s,%d\r\n",__FILE__, __LINE__)
-
+#define TEST_MSG(...)			MSG(__VA_ARGS__)
 
 /**
   * @brief  Before and after start.
@@ -81,8 +81,9 @@ uint8_t addDebugBuffer(char c);
 void debug_init(void);
 void debug_IRQ(void);
 
-	#ifdef TEST_ON
+
 	void test_printf(void);
-	TEST test_SpeedOfBuffer_printf(void);
-	#endif
+	void test_SpeedOfBuffer_printf(void);
+
+
 #endif

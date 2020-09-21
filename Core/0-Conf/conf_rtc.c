@@ -15,7 +15,7 @@ void RTC_conf(void)
 	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC;
 	PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_HSE_DIV128;	//精度可达 15s/天 以内
 	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK){
-		Error_Handler();
+		Error_Handler()
 	}
 
 	RTC_TimeTypeDef sTime = {0};
@@ -26,7 +26,7 @@ void RTC_conf(void)
 	hrtc.Init.AsynchPrediv = RTC_AUTO_1_SECOND;
 	hrtc.Init.OutPut = RTC_OUTPUTSOURCE_ALARM;
 	if (HAL_RTC_Init(&hrtc) != HAL_OK){
-		Error_Handler();
+		Error_Handler()
 	}
 
 	if(HAL_RTCEx_BKUPRead(&hrtc, 1) != 0x6F6A){	//判断是否初始化
@@ -36,7 +36,7 @@ void RTC_conf(void)
 		sTime.Minutes = 0x56;
 		sTime.Seconds = 0x50;
 		if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK){
-			Error_Handler();
+			Error_Handler()
 		}
 
 		DateToUpdate.WeekDay = RTC_WEEKDAY_SATURDAY;
@@ -44,7 +44,7 @@ void RTC_conf(void)
 		DateToUpdate.Date = 11;
 		DateToUpdate.Year = 20;
 		if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BIN) != HAL_OK){
-			Error_Handler();
+			Error_Handler()
 		}
 
 		HAL_RTCEx_BKUPWrite(&hrtc, 1, 0x6F6A);
@@ -57,7 +57,7 @@ void RTC_conf(void)
 		DateToUpdate.Date = HAL_RTCEx_BKUPRead(&hrtc, 3);
 		DateToUpdate.Year = HAL_RTCEx_BKUPRead(&hrtc, 4);
 		if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BIN) != HAL_OK){
-			Error_Handler();
+			Error_Handler()
 		}
 	}
 }

@@ -12,10 +12,19 @@ int main(void)
 #ifdef TEST_ON
 	
 	printf("beginning\r\n");
-	Dual_DAC_Tri_Output();
-	/*ForceCollector_test();*/
-	/*systemTimer_init();
-	debug_init();*/
+	test_GetForce();
+//	test_searchID();
+//	ADS_Sampling();
+//	getSingleChannelData();
+//	test_Command();
+//	expriment_1();
+//	Dual_DAC_Tri_Output(); 
+//	getData();
+//	ADS_Sampling();
+
+//	ForceCollectExperiment();
+//	systemTimer_init();
+//	debug_init();
 
 //	test_ultrasonic();
 //	LED_init();
@@ -23,10 +32,10 @@ int main(void)
 //	Servo_Init();
 //	Servo_Start()CANOpen_Inital;
 
-	//test_printf();
-	/*test_SpeedOfBuffer_printf();*/
-	/*CAN_Send_test();*/
-	/*CAN_Rcv_test();*/
+//	test_printf();
+//	test_SpeedOfBuffer_printf();
+//	CAN_Send_test();
+//	CAN_Rcv_test();
 	
 #endif
 

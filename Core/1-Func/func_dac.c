@@ -259,7 +259,7 @@ TEST Dual_DAC_Tri_Output(void)
 	Mx_TriangleWaveGenerate(&hdac, ChannelTwo, DAC_TRIANGLEAMPLITUDE_2047);
 	MX_DAC_SetValue(&hdac, ChannelOne|ChannelTwo, DAC_ALIGN_12B_R, 2047<<16 | 0x00);
 	
-	MX_TIM_CounterInterrupt(TIM4, 100000, 100);
+	MX_TIM_CounterInterrupt(TIM4, 1000000, 100);
 	MX_TIM_MasterSet(TIM4, TIM_TRGO_UPDATE);
 	HAL_TIM_Base_Start(&htim4);
 }

@@ -53,7 +53,7 @@ void setSysTime(SysTime sys,uint8_t isyear)
 		sTime.Minutes = sys.Minute;
 		sTime.Seconds = sys.Second;
 		if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK){
-			Error_Handler();
+			Error_Handler()
 		}
 	}
 	else{
@@ -61,7 +61,7 @@ void setSysTime(SysTime sys,uint8_t isyear)
 		DateToUpdate.Date = sys.Day;
 		DateToUpdate.Year = sys.Year;
 		if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BIN) != HAL_OK){
-			Error_Handler();
+			Error_Handler()
 		}
 		getDate();
 	}

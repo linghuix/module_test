@@ -26,6 +26,8 @@
 #include "debug.h"
 #include  "BSP.h"
 
+#include "func_1912.h"
+
 /** @addtogroup Template_Project
   * @{
   */
@@ -223,8 +225,16 @@ void TIM1_TRG_COM_IRQHandler(void)
 */
 void USART1_IRQHandler(void)
 {
-	//HAL_UART_IRQHandler(&huart1);
 	debug_IRQ();
+	HAL_UART_IRQHandler(&huart1);
+}
+
+
+void USART2_IRQHandler(void)
+{
+	HAL_UART_IRQHandler(&huart2);
+	
+	IDLE_UART_IRQHandler(&huart2);
 }
 
 

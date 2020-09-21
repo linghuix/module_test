@@ -26,7 +26,7 @@ void MX_SPIx_Init(SPI_TypeDef * SPI)
 	  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_ENABLE;
 	  hspi1.Init.CRCPolynomial = 7;
 	  if (HAL_SPI_Init(&hspi1) != HAL_OK){
-	    Error_Handler();
+	    Error_Handler()
 	  }
 	}
 }
