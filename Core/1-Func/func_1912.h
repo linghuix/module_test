@@ -12,14 +12,17 @@
 
 
 #define Force_huart huart2
-
 #define Force_uart USART2
 
 
+extern float F_1912;
+
 TEST test1912_forceCollector_communication(void);
+TEST test_GetCurrentForce(void);
 TEST test_CheckSum(void);
 TEST test_Command(void);
 TEST test_searchID(void);
 TEST test_GetForce(void);
 void IDLE_UART_IRQHandler(UART_HandleTypeDef *huart);
+
 #endif /* 1_FUNC_ACCELERATE_H_ */

@@ -7,7 +7,7 @@
 
 //G T R Vt
 
-//�������������.c�ļ������
+
 extern UART_HandleTypeDef huart1;
 uint8_t ch_print;
 uint8_t ch_scanf;
@@ -70,7 +70,7 @@ int _write(int file, char *ptr, int len)
 #endif
 
 
-/*
+/**
  * author lhx
  * May 29, 2020
  *
@@ -113,7 +113,7 @@ int fgetc(FILE * F)		// Keil
 #endif
 
 #endif
-/*
+/**
  * author lhx
  * May 13, 2020
  *
@@ -128,7 +128,7 @@ void debug_init(void)
 	printf("debug initing ... \r\n");
 }
 
-/*
+/**
  * author lhx
  * May 13, 2020
  *

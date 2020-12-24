@@ -232,9 +232,9 @@ void USART1_IRQHandler(void)
 
 void USART2_IRQHandler(void)
 {
-	HAL_UART_IRQHandler(&huart2);
+	HAL_UART_IRQHandler(&huart2);			// for func_192
 	
-	IDLE_UART_IRQHandler(&huart2);
+	IDLE_UART_IRQHandler(&huart2);			// for func_1912
 }
 
 

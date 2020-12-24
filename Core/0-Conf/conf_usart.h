@@ -9,7 +9,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "device_bsp.h"
-#include "stdio.h"
 
 
 extern UART_HandleTypeDef huart1;

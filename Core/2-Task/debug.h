@@ -4,6 +4,7 @@
 #include "conf_usart.h"
 
 #define DEBUG_WAR_CONSOLE_ON
+#define DEBUG_ERR_CONSOLE_ON
 
 #define BufferSize 1000
 #define PORT huart1
@@ -12,6 +13,7 @@
 #define BUFF_Printf
 //#define NO_BUFF_Printf
 #define KEIL
+
 
 
 
@@ -49,7 +51,8 @@
 #define SYNC_MSG(...)			//MSG(__VA_ARGS__)
 #define ROW_MSG(...)			MSG(__VA_ARGS__)	
 #define ERROR(s,...)			printf("#ERROR %d# ",s);MSG(__VA_ARGS__);printf("\t--%s,%d\r\n",__FILE__, __LINE__)
-#define TEST_MSG(...)			MSG(__VA_ARGS__)
+#define TEST_MSG(...)			//MSG(__VA_ARGS__)
+
 
 /**
   * @brief  Before and after start.
@@ -59,6 +62,8 @@
 
 
 #define MSG_deviceTest(...) 	MSG(__VA_ARGS__)
+
+
 
 /*
  * author lhx
@@ -82,8 +87,8 @@ void debug_init(void);
 void debug_IRQ(void);
 
 
-	void test_printf(void);
-	void test_SpeedOfBuffer_printf(void);
+void test_printf(void);
+void test_SpeedOfBuffer_printf(void);
 
 
 #endif

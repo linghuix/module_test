@@ -1,4 +1,4 @@
-/*
+/**
  * func_can.c
  *
  *  Created on: Mar 14, 2020
@@ -18,9 +18,6 @@ uint16_t GetSingleDiscontinueADCData(ADC_HandleTypeDef * phadc)
  
 	return (uint16_t)HAL_ADC_GetValue(phadc);
 }
-
-
-
 
 
 

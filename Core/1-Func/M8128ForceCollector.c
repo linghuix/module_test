@@ -3,7 +3,7 @@
 
 /**
   ******************************************************************************
-  * @file    stm32f1xx_hal_can.c
+  * @file    M8128ForceCollector.c
   * @author  MCD Application Team
   * @brief   CAN HAL module driver.
   *          This file provides firmware functions to manage the following
@@ -19,12 +19,12 @@
   */
 
 
-//#define Force_Collect_TEST
+#define Force_Collect_TEST
 
 #define FORCENUMMAX 27
 
 uint8_t force[FORCENUMMAX];	// force raw data(hex of float) store 
-//float measureForce[6];		// force data store
+//float measureForce[6];	// force data store
 CanTxMsg ForceCommand;		// command can frame
 CanRxMsg ForceData;			// raw data can frame
 
@@ -59,6 +59,7 @@ void SendString (char * str)
 		while(MX_CANx_send(&hcan1, &ForceCommand, mailbox) != HAL_OK);
 	}
 }
+
 
 /**
   * @brief  Init Force collector beforce measure force data. 
@@ -254,7 +255,7 @@ TEST ForceCollectExperiment(void)
   */
 
 uint8_t OneframeDetected = 0;
-uint16_t ordernum, dataLength,forceIndex = 0;
+uint16_t packageID, dataLength,forceIndex = 0;
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 	uint32_t index=0;
@@ -265,7 +266,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 			forceIndex = 0;
 			OneframeDetected = 1;
 			dataLength = ((ForceData.Data[2]<<8)| ForceData.Data[3]) - 2;
-			ordernum = (ForceData.Data[4]<<8) | ForceData.Data[5];
+			packageID = (ForceData.Data[4]<<8) | ForceData.Data[5];
 			while( (6+forceIndex) < 8){
 				force[forceIndex] = ForceData.Data[6+forceIndex];
 				forceIndex++; dataLength--;
@@ -282,14 +283,14 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		
 		if(dataLength == 0 && OneframeDetected == 1){
 			
-			printf("%d-%d\t",n,ordernum);
+			printf("Index %d-%d\t", n, packageID);
 			float * f;
 			int data;
 //			for(uint8_t j=5;j<6;j++){
-			for(uint8_t j=2;j<3;j++){
+			for(uint8_t j=0;j<6;j++){
 				data = force[4*j] | force[4*j+1]<<8 | force[4*j+2]<<16 | force[4*j+3]<<24;
 				f = (float*) &data;
-				if(j==2){
+				if(j == 5){
 //					addForceBuffer(*f);
 					addWeightingForceBuffer(*f);
 					printf("%.5f\t", getfilteredForce());

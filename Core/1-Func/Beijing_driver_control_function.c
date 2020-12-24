@@ -13,7 +13,7 @@
 
 
 
-#define DRIVER_TEST
+//#define DRIVER_TEST
 #define delay_us HAL_Delay
 /**
   * @brief  Hardware Interface. 

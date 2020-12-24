@@ -18,7 +18,7 @@ void Ultrasonic_Init(void);
 void Ultrasonic_Start(void);
 void start_getDistance(void);
 
-/*
+/**
  * author lhx
  * Apr 5, 2020
  *
@@ -53,7 +53,7 @@ void start_getDistance(void)
 	Ultrasonic_Start();
 }
 
-/*
+/**
  * author lhx
  * Apr 6, 2020
  *
@@ -85,7 +85,7 @@ void ultraCapture_callback(TIM_HandleTypeDef *htim)
 	}
 }
 
-/*
+/**
  * author lhx
  * Apr 12, 2020
  *
@@ -117,7 +117,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 #ifdef ULTRA_TEST
-/*
+/**
  * author lhx
  * Apr 6, 2020
  *
@@ -132,7 +132,7 @@ void test_ultrasonic(void)
 	start_getDistance();
 }
 
-/*
+/**
  * author lhx
  * Apr 6, 2020
  *

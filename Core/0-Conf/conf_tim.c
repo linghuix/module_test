@@ -383,7 +383,7 @@ void TIMx_CountSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)	//TIM miu_s
 }
 
 
-static void MX_TIM_SlaveSet(TIM_TypeDef * TIM)
+void MX_TIM_SlaveSet(TIM_TypeDef * TIM)
 {
 	TIM_SlaveConfigTypeDef sSlaveConfig = {0};
 	if(TIM == TIM1){
