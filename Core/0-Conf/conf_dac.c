@@ -25,7 +25,8 @@ DAC_HandleTypeDef hdac;
   */
 void MX_DAC_Init(uint32_t DAC_CHANNEL1, uint32_t DAC_CHANNEL2, uint32_t Trigger_Mode)
 {
-
+	MSG_BSTART("dac","conf");
+	
   DAC_ChannelConfTypeDef sConfig = {0};
 
   /** DAC Initialization */
@@ -52,6 +53,7 @@ void MX_DAC_Init(uint32_t DAC_CHANNEL1, uint32_t DAC_CHANNEL2, uint32_t Trigger_
 	  }
   }
 
+  	MSG_ASTART("dac","conf");
 }
 
 

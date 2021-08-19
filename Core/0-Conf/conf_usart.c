@@ -1,8 +1,9 @@
 
-/* Includes ------------------------------------------------------------------*/
 #include "conf_usart.h"
 //#include "conf_global.h""
 
+
+/* gobal variable*/
 GPIO_InitTypeDef GPIO_InitStruct;
 
 UART_HandleTypeDef huart1;
@@ -11,34 +12,41 @@ UART_HandleTypeDef huart3;
 
 DMA_HandleTypeDef hdma_usart1_rx;
 
-/* USART1 init function */
 
+
+/**
+  * @brief USART1 Function Initialization
+  * @param None
+  * @retval None
+  */
 void MX_USART1_UART_Init(void)
 {
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+    MSG_BSTART("usart1","conf");
+    huart1.Instance = USART1;
+    huart1.Init.BaudRate = 115200;
+    huart1.Init.WordLength = UART_WORDLENGTH_8B;
+    huart1.Init.StopBits = UART_STOPBITS_1;
+    huart1.Init.Parity = UART_PARITY_NONE;
+    huart1.Init.Mode = UART_MODE_TX_RX;
+    huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    huart1.Init.OverSampling = UART_OVERSAMPLING_16;
 	
-  if (HAL_UART_Init(&huart1) != HAL_OK){
-    Error_Handler()
-  }
+    if (HAL_UART_Init(&huart1) != HAL_OK){
+        Error_Handler()
+    }
+    MSG_ASTART("usart1","conf");
 }
 
-/*
- * author lhx
- * May 13, 2020
- *
- * @brief : 调用自HAL_UART_MspInit
- * 			引脚初始化
- * 			时钟开启
- * Window > Preferences > C/C++ > Editor > Templates.
- */
 
+
+/**
+  * @author lhx  May 13, 2020
+  * @brief  usart hardware initalization      
+  * 		引脚初始化, 时钟开启
+  * @calledIn HAL_UART_MspInit()
+  * @param  uartHandle: UART Handler
+  * @retval None
+  */
 void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
 {
     if(uartHandle->Instance==USART1)
@@ -49,12 +57,6 @@ void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
 		*/
 		__HAL_RCC_USART1_CLK_ENABLE();
 		__HAL_RCC_GPIOA_CLK_ENABLE();
-		
-		//    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
-		//    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-		//    GPIO_InitStruct.Pull = GPIO_NOPULL;
-		//    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-		//    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 		GPIO_InitStruct.Pin = GPIO_PIN_10;
 		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -98,12 +100,6 @@ void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
 		PB10     ------> USART3_TX
 		*/
 
-		/*GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11;  这种配置，可以发送，但是不能接受数据
-		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);*/
-
 		GPIO_InitStruct.Pin = GPIO_PIN_10;
 		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
 		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -116,13 +112,14 @@ void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
     }
 }
 
-/*
- * author lhx
- * May 13, 2020
- *
- * @brief : 串口中断功能设置和开启
- * Window > Preferences > C/C++ > Editor > Templates.
- */
+
+
+/**
+  * @author lhx  May 13, 2020
+  * @brief  串口中断功能设置(注意此处并没有激活/启用中断功能)
+  * @param  uartHandle: UART Handler
+  * @retval None
+  */
 void USART_NVIC_Init(UART_HandleTypeDef* uartHandle)
 {
     if(uartHandle->Instance==USART1)
@@ -133,22 +130,29 @@ void USART_NVIC_Init(UART_HandleTypeDef* uartHandle)
     }
     else if(uartHandle->Instance==USART2)
     {
-		HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+		HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
 		HAL_NVIC_EnableIRQ(USART2_IRQn);
 		//__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
     }
     else if(uartHandle->Instance==USART3)
     {
 		/* Peripheral interrupt init */
-		HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+		HAL_NVIC_SetPriority(USART3_IRQn, 0, 2);
 		HAL_NVIC_EnableIRQ(USART3_IRQn);
     }
 }
 
 
+
+
+/**
+  * @brief USART2 Function Initialization
+  * @param None
+  * @retval None
+  */
 void MX_USART2_UART_Init(void)
 {
-
+  MSG_BSTART("usart2","conf");
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -162,12 +166,20 @@ void MX_USART2_UART_Init(void)
     Error_Handler()
   }
 
+  MSG_ASTART("usart2","conf");
 }
 
 
+
+
+/**
+  * @brief USART3 Function Initialization
+  * @param None
+  * @retval None
+  */
 void MX_USART3_UART_Init(void)
 {
-
+MSG_BSTART("usart3","conf");
   huart3.Instance = USART3;
   huart3.Init.BaudRate = 115200;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
@@ -180,17 +192,21 @@ void MX_USART3_UART_Init(void)
   {
     Error_Handler()
   }
-
+MSG_ASTART("usart3","conf");
 }
 
-/*
- * author lhx
- * May 13, 2020
- *
- * @brief : 调用自 HAL_UART_Init，用于硬件初始化
- * Window > Preferences > C/C++ > Editor > Templates.
- */
 
+
+
+/**
+  * @author lhx  May 13, 2020
+  * @brief  USART MCU Specific Package Initialization
+  * @calledIn HAL_UART_Init()，用于硬件初始化
+  * @call   USART_Hardware_Init()
+  *         USART_NVIC_Init()
+  * @param  uartHandle: UART Handler
+  * @retval None
+  */ 
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 {
 	USART_Hardware_Init(uartHandle);
@@ -198,6 +214,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 }
 
 
+
+
+/**
+  * @author lhx  May 13, 2020
+  * @brief  USART MCU Specific Package De-Initialization
+  * @param  uartHandle: UART Handler
+  * @retval None
+  */ 
 void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 {
 
@@ -252,10 +276,11 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   }
 } 
 
-void USART_init(void)
-{
-	MX_USART1_UART_Init();
-	MX_USART2_UART_Init();
-}
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/*void USART_init(void)*/
+/*{*/
+/*	MX_USART1_UART_Init();*/
+/*	MX_USART2_UART_Init();*/
+/*}*/
+
+

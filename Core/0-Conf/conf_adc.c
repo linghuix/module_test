@@ -1,12 +1,16 @@
 /*
  * conf_adc.c
  *
- *  Created on: Aug 14, 2020
- *      Author: test		
+ * Created on: Aug 14, 2020
+ *      Author: lhx		
  * https://www.cnblogs.com/cat-li/p/4982510.html
  * https://cpp.hotexamples.com/examples/-/-/HAL_ADC_PollForConversion/cpp-hal_adc_pollforconversion-function-examples.html
  */
+ 
+ 
 #include "conf_adc.h"
+
+
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
@@ -80,8 +84,15 @@ ADC_HandleTypeDef hadc3;
 //  HAL_ADCEx_Calibration_Start(&hadc1);
 //}
 
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
 void MX_ADC1_Init(void)
 {
+	MSG_BSTART("adc1","conf");
 	RCC_PeriphCLKInitTypeDef ADC_CLKInit;
 
 	ADC_CLKInit.PeriphClockSelection=RCC_PERIPHCLK_ADC;			//ADC clk
@@ -107,15 +118,19 @@ void MX_ADC1_Init(void)
   HAL_ADCEx_Calibration_Start(&hadc1);
   
   /** Configure Regular Channel 
+	@ADC_CHANNEL_3: PA3
+	@ADC_CHANNEL_1: PA1
   */
   ADC_ChannelConfTypeDef sConfig = {0};
-  sConfig.Channel = ADC_CHANNEL_3;
+  sConfig.Channel = ADC_CHANNEL_1;			
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler()
   }
+  
+ MSG_ASTART("adc1","conf");
   
 }
 
@@ -126,6 +141,8 @@ void MX_ADC1_Init(void)
   */
 void MX_ADC2_Init(void)
 {
+	MSG_BSTART("adc2","conf");
+	
 	RCC_PeriphCLKInitTypeDef ADC_CLKInit;
 
 	ADC_CLKInit.PeriphClockSelection=RCC_PERIPHCLK_ADC;			//ADC clk
@@ -169,7 +186,11 @@ void MX_ADC2_Init(void)
   {
     Error_Handler()
   }
+  
+	MSG_ASTART("adc2","conf");
 }
+
+
 
 /**
   * @brief ADC3 Initialization Function
@@ -178,6 +199,8 @@ void MX_ADC2_Init(void)
   */
  void MX_ADC3_Init(void)
 {
+	MSG_BSTART("adc3","conf");
+	
 	RCC_PeriphCLKInitTypeDef ADC_CLKInit;
 
 	ADC_CLKInit.PeriphClockSelection=RCC_PERIPHCLK_ADC;			//ADC clk
@@ -295,9 +318,19 @@ void MX_ADC2_Init(void)
   }
   
   HAL_ADCEx_Calibration_Start(&hadc3);
+  
+  
+  MSG_ASTART("adc3","conf");
 }
 
 
+
+
+/**
+  * @brief ADC Hardware (GPIO, Clock) Initialization Function
+  * @param None
+  * @retval None
+  */
 void ADC_Hardware_Init(ADC_HandleTypeDef* hadc)
 {
    GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -309,6 +342,7 @@ void ADC_Hardware_Init(ADC_HandleTypeDef* hadc)
 
 	 __HAL_RCC_GPIOC_CLK_ENABLE();
 	 __HAL_RCC_GPIOA_CLK_ENABLE();
+	 
 	 /**ADC1 GPIO Configuration
 	 PC2     ------> ADC1_IN12
 	 PA0-WKUP     ------> ADC1_IN0
@@ -332,6 +366,7 @@ void ADC_Hardware_Init(ADC_HandleTypeDef* hadc)
 
 	 __HAL_RCC_GPIOA_CLK_ENABLE();
 	 __HAL_RCC_GPIOC_CLK_ENABLE();
+	 
 	 /**ADC2 GPIO Configuration
 	 PA0-WKUP     ------> ADC2_IN0
 	 PC5     ------> ADC2_IN15
@@ -352,6 +387,7 @@ void ADC_Hardware_Init(ADC_HandleTypeDef* hadc)
 
 	 __HAL_RCC_GPIOC_CLK_ENABLE();
 	 __HAL_RCC_GPIOA_CLK_ENABLE();
+	 
 	 /**ADC3 GPIO Configuration
 	 PC3     ------> ADC3_IN13
 	 PA0-WKUP     ------> ADC3_IN0
@@ -366,6 +402,12 @@ void ADC_Hardware_Init(ADC_HandleTypeDef* hadc)
    }
 }
 
+
+/**
+  * @brief ADC Hardware (GPIO, Clock) De-Initialization Function
+  * @param None
+  * @retval None
+  */
 void ADC_Hardware_DeInit(ADC_HandleTypeDef* hadc)
 {
 
@@ -409,19 +451,17 @@ void ADC_Hardware_DeInit(ADC_HandleTypeDef* hadc)
 	HAL_GPIO_DeInit(GPIOC, GPIO_PIN_3);
 
 	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_0);
-
   }
-
 }
 
 
 
 /**
-* @brief ADC MSP Initialization
-* This function configures the hardware resources used in this example
-* @param hadc: ADC handle pointer
-* @retval None
-*/
+  * @brief ADC MSP Initialization. This function configures the hardware resources used in this example
+  * @param hadc: ADC handle pointer
+  * @call  ADC_Hardware_Init()
+  * @retval None
+  */
 void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 {
 	ADC_Hardware_Init(hadc);
@@ -429,16 +469,13 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
 
 
 
-
 /**
-* @brief ADC MSP De-Initialization
-* This function freeze the hardware resources used in this example
-* @param hadc: ADC handle pointer
-* @retval None
-*/
+  * @brief ADC MSP De-Initialization. This function freeze the hardware resources used in this example
+  * @param hadc: ADC handle pointer
+  * @retval None
+  */
 void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
 {
 	ADC_Hardware_DeInit(hadc);
 }
-
 

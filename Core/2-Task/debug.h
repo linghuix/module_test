@@ -6,15 +6,14 @@
 #define DEBUG_WAR_CONSOLE_ON
 #define DEBUG_ERR_CONSOLE_ON
 
-#define BufferSize 1000
 #define PORT huart1
 
 
-#define BUFF_Printf
+#define BUFF_Printf				//使用缓冲区进行串口 printf 发送
+#define BufferSize 1000		    //使用缓冲区大小，数据流大时可以选择大一些
 //#define NO_BUFF_Printf
-#define KEIL
 
-
+#define KEIL					//使用的环境是keil5
 
 
 /* Definition of error and warning macros */
@@ -39,9 +38,15 @@
 #endif
 
 
-/* -------------------------------------- */
+
+/**
+  * @brief  Before and after start. 初始化成功信息
+  */
+# define MSG_BSTART(device, action) 	MSG( device );MSG(" waiting for ");MSG(action);MSG(" ...\r\n");
+# define MSG_ASTART(device, action) 	MSG( device );MSG(" already ");MSG(action);MSG("\r\n");
 
 
+/* ------------自定义提示信息-------------------------- */
 
 #define Task_MSG(...) 			MSG(__VA_ARGS__)
 #define MMSG(...) 				MSG(__VA_ARGS__)
@@ -50,18 +55,10 @@
 #define TPDO_MSG(...)			//MSG(__VA_ARGS__)
 #define SYNC_MSG(...)			//MSG(__VA_ARGS__)
 #define ROW_MSG(...)			MSG(__VA_ARGS__)	
-#define ERROR(s,...)			printf("#ERROR %d# ",s);MSG(__VA_ARGS__);printf("\t--%s,%d\r\n",__FILE__, __LINE__)
-#define TEST_MSG(...)			//MSG(__VA_ARGS__)
-
-
-/**
-  * @brief  Before and after start.
-  */
-# define MSG_BSTART(device, action) 	MSG( device );printf(" waiting for ");printf(action);printf(" ...\r\n");
-# define MSG_ASTART(device, action) 	MSG( device );printf(" already ");printf(action);printf("\r\n");
-
-
+#define ERROR(s,...)			MSG("#ERROR %d# ",s);MSG(__VA_ARGS__);MSG("\t--%s,%d\r\n",__FILE__, __LINE__)
+#define TEST_MSG(...)			MSG(__VA_ARGS__)
 #define MSG_deviceTest(...) 	MSG(__VA_ARGS__)
+
 
 
 

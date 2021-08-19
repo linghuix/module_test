@@ -155,7 +155,7 @@ void warning_Block(uint8_t SingTimes, uint16_t period, Sound_tone_e tone, int8_t
 	}
 }
 
-
+#define BEEPTEST
 #ifdef BEEPTEST
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test
 #include "main.h"

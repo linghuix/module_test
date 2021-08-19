@@ -1,11 +1,4 @@
-/**
-  ******************************************************************************
-  * @文件名     ： bsp_can.c
-  * @作者       ： strongerHuang
-  * @版本       ： V1.0.0
-  * @日期       ： 2018年11月14日
-  * @摘要       ： CAN底层源文件
-  ******************************************************************************/
+
 /*----------------------------------------------------------------------------
   更新日志:
   2018-11-14 V1.0.0:初始版本
@@ -15,11 +8,13 @@
 
 CAN_HandleTypeDef hcan1;
 
-/**  
-	mode:CAN_MODE_NORMAL/CAN_MODE_LOOPBACK  
-	bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/3 = 1MHz 
-**/
 
+/**
+  * @brief CAN Function Initialization. bps set and mode set
+  * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
+  * @retval None
+  * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/3 = 1 MHz
+  */
 void CANHandle_Init(uint32_t mode)
 {
 	hcan1.Instance = CAN1;
@@ -28,12 +23,64 @@ void CANHandle_Init(uint32_t mode)
 	hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
 	hcan1.Init.TimeSeg1 = CAN_BS1_8TQ;
 	hcan1.Init.TimeSeg2 = CAN_BS2_3TQ;
-	hcan1.Init.TTCM = DISABLE; //时间触发模式 - 时间戳
-	hcan1.Init.ABOM = DISABLE; //自动总线关闭管理模式
-	hcan1.Init.AWUM = DISABLE; //自动唤醒模式
-	hcan1.Init.NART = DISABLE; //禁止自动重发模式
-	hcan1.Init.RFLM = DISABLE; //接收FIFO锁定模式
-	hcan1.Init.TXFP = ENABLE; //发送FIFO顺序优先级
+	hcan1.Init.TTCM = DISABLE;      //时间触发模式 - 时间戳
+	hcan1.Init.ABOM = DISABLE;      //自动总线关闭管理模式
+	hcan1.Init.AWUM = DISABLE;      //自动唤醒模式
+	hcan1.Init.NART = DISABLE;      //禁止自动重发模式
+	hcan1.Init.RFLM = DISABLE;      //接收FIFO锁定模式
+	hcan1.Init.TXFP = ENABLE;       //发送FIFO顺序优先级
+	if (HAL_CAN_Init(&hcan1) != HAL_OK)
+	{
+		Error_Handler()
+		;
+	}
+}
+/**
+  * @brief CAN Function Initialization. bps set and mode set
+  * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
+  * @retval None
+  * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/6 = 500 KHz
+  */
+void CANHandle_Init_500K(uint32_t mode)
+{
+	hcan1.Instance = CAN1;
+	hcan1.Init.Prescaler = 6;
+	hcan1.Init.Mode = mode;
+	hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
+	hcan1.Init.TimeSeg1 = CAN_BS1_8TQ;
+	hcan1.Init.TimeSeg2 = CAN_BS2_3TQ;
+	hcan1.Init.TTCM = DISABLE;      //时间触发模式 - 时间戳
+	hcan1.Init.ABOM = DISABLE;      //自动总线关闭管理模式
+	hcan1.Init.AWUM = DISABLE;      //自动唤醒模式
+	hcan1.Init.NART = DISABLE;      //禁止自动重发模式
+	hcan1.Init.RFLM = DISABLE;      //接收FIFO锁定模式
+	hcan1.Init.TXFP = ENABLE;       //发送FIFO顺序优先级
+	if (HAL_CAN_Init(&hcan1) != HAL_OK)
+	{
+		Error_Handler()
+		;
+	}
+}
+/**
+  * @brief CAN Function Initialization. bps set and mode set
+  * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
+  * @retval None
+  * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/12 = 250 KHz
+  */
+void CANHandle_Init_250K(uint32_t mode)
+{
+	hcan1.Instance = CAN1;
+	hcan1.Init.Prescaler = 12;
+	hcan1.Init.Mode = mode;
+	hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
+	hcan1.Init.TimeSeg1 = CAN_BS1_8TQ;
+	hcan1.Init.TimeSeg2 = CAN_BS2_3TQ;
+	hcan1.Init.TTCM = DISABLE;      //时间触发模式 - 时间戳
+	hcan1.Init.ABOM = DISABLE;      //自动总线关闭管理模式
+	hcan1.Init.AWUM = DISABLE;      //自动唤醒模式
+	hcan1.Init.NART = DISABLE;      //禁止自动重发模式
+	hcan1.Init.RFLM = DISABLE;      //接收FIFO锁定模式
+	hcan1.Init.TXFP = ENABLE;       //发送FIFO顺序优先级
 	if (HAL_CAN_Init(&hcan1) != HAL_OK)
 	{
 		Error_Handler()
@@ -41,7 +88,66 @@ void CANHandle_Init(uint32_t mode)
 	}
 }
 
-void CAN_ITEnable()
+/**
+  * @brief CAN Function Initialization. bps set and mode set
+  * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
+  * @retval None
+  * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/12/2 = 125 KHz
+  */
+void CANHandle_Init_125K(uint32_t mode)
+{
+	hcan1.Instance = CAN1;
+	hcan1.Init.Prescaler = 24;
+	hcan1.Init.Mode = mode;
+	hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
+	hcan1.Init.TimeSeg1 = CAN_BS1_8TQ;
+	hcan1.Init.TimeSeg2 = CAN_BS2_3TQ;
+	hcan1.Init.TTCM = DISABLE;      //时间触发模式 - 时间戳
+	hcan1.Init.ABOM = DISABLE;      //自动总线关闭管理模式
+	hcan1.Init.AWUM = DISABLE;      //自动唤醒模式
+	hcan1.Init.NART = DISABLE;      //禁止自动重发模式
+	hcan1.Init.RFLM = DISABLE;      //接收FIFO锁定模式
+	hcan1.Init.TXFP = ENABLE;       //发送FIFO顺序优先级
+	if (HAL_CAN_Init(&hcan1) != HAL_OK)
+	{
+		Error_Handler()
+		;
+	}
+}
+
+
+/**
+  * @brief CAN Function Initialization. bps set and mode set
+  * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
+  * @retval None
+  * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(4+4+1)/800 = 125 KHz
+  */
+void CANHandle_Init_5K(uint32_t mode)
+{
+	hcan1.Instance = CAN1;
+	hcan1.Init.Prescaler = 800;
+	hcan1.Init.Mode = mode;
+	hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
+	hcan1.Init.TimeSeg1 = CAN_BS1_4TQ;
+	hcan1.Init.TimeSeg2 = CAN_BS2_4TQ;
+	hcan1.Init.TTCM = DISABLE;      //时间触发模式 - 时间戳
+	hcan1.Init.ABOM = DISABLE;      //自动总线关闭管理模式
+	hcan1.Init.AWUM = DISABLE;      //自动唤醒模式
+	hcan1.Init.NART = DISABLE;      //禁止自动重发模式
+	hcan1.Init.RFLM = DISABLE;      //接收FIFO锁定模式
+	hcan1.Init.TXFP = ENABLE;       //发送FIFO顺序优先级
+	if (HAL_CAN_Init(&hcan1) != HAL_OK)
+	{
+		Error_Handler()
+		;
+	}
+}
+
+
+/**
+  * @brief activate and start the function of CAN interrupt
+  */
+void CAN_ITEnable(void)
 {
 	if (HAL_CAN_ActivateNotification(&hcan1,
 			CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING)
@@ -52,7 +158,11 @@ void CAN_ITEnable()
 	}
 }
 
-void CAN_ITDISEnable()
+
+/**
+  * @brief unactivate CAN interrupt
+  */
+void CAN_ITDISEnable(void)
 {
 	if (HAL_CAN_DeactivateNotification(&hcan1,
 			CAN_IT_RX_FIFO0_MSG_PENDING | CAN_IT_RX_FIFO1_MSG_PENDING)
@@ -62,6 +172,7 @@ void CAN_ITDISEnable()
 		;
 	}
 }
+
 /************************************************
 函数名称 ： CAN_GPIO_Configuration
 功    能 ： CAN引脚配置
@@ -70,18 +181,23 @@ void CAN_ITDISEnable()
 作    者 ： strongerHuang
 *************************************************/
 
-/*
- * author lhx
+/**
+ * @author lhx
  *
- * @brief : CAN的硬件功能初始化
+ * @brief : CAN的硬件功能初始化 including function, filter, and activate interrupt(此时接受到信息能够立即进入中断)
+ * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
+ * @call CANHandle_Init()
+ *       CanFilter_Init()
+ *       CAN_ITEnable()
  * Window > Preferences > C/C++ > Editor > Templates.
  */
-
 void MX_CAN1_Init(uint32_t mode)
 {
-	CANHandle_Init(mode);
+	MSG_BSTART("can1","conf");
+	CANHandle_Init_125K(mode);
 	CanFilter_Init(&hcan1, CAN_FILTER_FIFO0);
 	CAN_ITEnable();
+	MSG_ASTART("can1","conf");
 }
 
 void MX_CAN1_Test_Init(uint32_t mode)
@@ -90,16 +206,19 @@ void MX_CAN1_Test_Init(uint32_t mode)
 	CanFilter_Init(&hcan1, CAN_FILTER_FIFO0);
 	CAN_ITEnable();
 }
-/*
- * author lhx
- *
- * @brief : 库函数提供的底层初始化 hook function:
- * 			GPIO配置，
- * 			开启时钟，
- * 			中断启用设置
- * Window > Preferences > C/C++ > Editor > Templates.
- */
 
+
+
+/**
+  * @author lhx  May 13, 2020
+  * @brief  USART MCU Specific Package Initialization. 库函数提供的底层初始化 hook function:
+  * 		GPIO配置，
+  * 		开启时钟，
+  * 		中断启用设置
+  * @calledIn HAL_CAN_Init()，用于硬件初始化
+  * @param  canHandle: can structure Handler
+  * @retval None
+  */ 
 void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
 {
 
@@ -107,7 +226,10 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
   if(canHandle->Instance==CAN1)
   {
 
-	   /*__HAL_RCC_CAN1_CLK_ENABLE();
+        /* configure PB8/9 to CAN1_RX/TX*/
+        
+	   /*
+	    __HAL_RCC_CAN1_CLK_ENABLE();
 	    __HAL_RCC_AFIO_CLK_ENABLE();
 	    __HAL_RCC_GPIOB_CLK_ENABLE();
 
@@ -127,7 +249,9 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
 	    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 	    __HAL_AFIO_REMAP_CAN1_2();
+	    
 	    //CAN1 interrupt Init 
+	    
 	    HAL_NVIC_SetPriority(CAN1_TX_IRQn, 0,1);
 	    HAL_NVIC_EnableIRQ(CAN1_TX_IRQn);
 	    HAL_NVIC_SetPriority(CAN1_RX0_IRQn, 0, 0);
@@ -135,8 +259,8 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
 		*/
 	
     __HAL_RCC_CAN1_CLK_ENABLE();
-
     __HAL_RCC_GPIOA_CLK_ENABLE();
+    
     //CAN GPIO Configuration
     //PA11     ------> CAN_RX
     //PA12     ------> CAN_TX
@@ -151,16 +275,25 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    // CAN1 interrupt Init
+    /*CAN1 interrupt Init*/
+    
     //HAL_NVIC_SetPriority(CAN1_TX_IRQn, 1, 1);
     //HAL_NVIC_EnableIRQ(CAN1_TX_IRQn);
-    
 	HAL_NVIC_SetPriority(CAN1_RX0_IRQn, 1, 1);
     HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);
 	
   }
 }
 
+
+
+/**
+  * @author lhx  May 13, 2020
+  * @brief  USART MCU Specific Package De-Initialization.
+  * @calledIn HAL_CAN_deInit()，用于硬件初始化
+  * @param  canHandle: can structure Handler
+  * @retval None
+  */ 
 void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 {
 
@@ -180,13 +313,14 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 }
 
 
-/*
- * author lhx
- *
- * @brief : 过滤器配置
- * Window > Preferences > C/C++ > Editor > Templates.
- */
 
+/**
+  * @author lhx  May 13, 2020
+  * @brief  过滤器配置
+  * @param  canHandle: can structure Handler
+  *         FILTER_FIFO: CAN_FILTER_FIFO0 or CAN_FILTER_FIFO1
+  * @retval None
+  */ 
 void CanFilter_Init(CAN_HandleTypeDef* hcan, uint32_t FILTER_FIFO)
 {
   CAN_FilterTypeDef canfilter;
@@ -213,4 +347,3 @@ void CanFilter_Init(CAN_HandleTypeDef* hcan, uint32_t FILTER_FIFO)
 }
 
 
-/**** Copyright (C)2018 strongerHuang. All Rights Reserved **** END OF FILE ****/

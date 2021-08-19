@@ -1,18 +1,20 @@
 
-#include "func_1912.h"
-#include "conf_gpio.h"
-void ClearForce_Device(uint8_t ID);
 /**
   * @brief  ChengTian ONE-AXIS Force. Only collecting force, without data processing.
-  * @hardware 	RS485 , DERE引脚与PD7相连，正点原子战舰开发板
+  * @hardware 	RS485 , DERE引脚与PD7相连，
+				正点原子战舰开发板
   *	@			D:\10-Chip_learning\0-硬件\100-硬件资料\单轴力矩传感器
   * @condition 12V
   * @year 2020/08/28
   */
 
 
+#include "func_1912.h"
+#include "conf_gpio.h"
+void ClearForce_Device(uint8_t ID);
 
-#define F1912_TEST
+
+
 
 float F_1912;
 uint8_t CommandSend[8] = {0x55,0xAA};			// send command
@@ -150,6 +152,8 @@ float getCurrentForce(void)
 
 
 
+//#define F1912_TEST
+
 
 #ifdef F1912_TEST
 
@@ -221,9 +225,9 @@ TEST test_GetCurrentForce(void)
 	Force_1912_Start();
 
 	while(1){
-		HAL_Delay(10);
+		HAL_Delay(200);
 		Currentforce = getCurrentForce();		//waiting response
-		MSG("test_GetCurrentForce - %.4f \r\n", Currentforce);
+//		MSG("test_GetCurrentForce - %.4f \r\n", Currentforce);
 	}
 }
 
@@ -277,7 +281,7 @@ TEST GetForce(UART_HandleTypeDef *huart)
 			int force = (int16_t)(CommandReceive[6]<<8|CommandReceive[5]);
 			F_1912 = force*0.01;
 			forceUpdate_flag = 1;
-//			TEST_MSG("%f\r\n", F_1912);
+			TEST_MSG("%f\r\n", F_1912);
 		}
 		else{
 			TEST_MSG("SUM Check Err\r\n");

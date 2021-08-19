@@ -42,4 +42,9 @@ void Acc2_Init(void);
 void Acc2_Start(void);
 void Acc1_Start(void);
 
+TEST test_acc_communication(void);
+TEST test_acc_collect(void);
+
+TEST acc_test(void);
+
 #endif /* 1_FUNC_ACCELERATE_H_ */

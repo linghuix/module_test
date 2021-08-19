@@ -13,11 +13,15 @@
 
 #include "BSP.h"
 
-void CAN_Send_test(void);
+
 
 Error MX_CANx_send(CAN_HandleTypeDef *hcan, CanTxMsg *msg, MAIL pmailbox);
 Error MX_CANx_get(CAN_HandleTypeDef *phcan, CanRxMsg *msg, uint32_t FIFO);
 void CAN_Start(CAN_HandleTypeDef *phcan);
+
+
+void CAN_Send_test(void);
 void CAN_Rcv_test(void);
+
 
 #endif /* BSP_FUNC_CAN_H_ */

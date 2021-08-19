@@ -6,6 +6,8 @@
  */
 #include "func_can.h"
 
+
+
 /** 
 	error: HAL_ERROR / HAL_OK 
 	
@@ -34,7 +36,7 @@ void CAN_Start(CAN_HandleTypeDef *phcan)
 	MSG_ASTART("CAN", "start");
 }
 
-
+//#define CAN_TEST
 
 #ifdef CAN_TEST
 
@@ -74,8 +76,6 @@ void CAN_Send_test(void)
 	{
 		if(i++ > 500000){//周期 0.133s 的样子
 			i = 0;
-			mailbox = (mailbox+1)%3;
-			MX_CANx_send(&hcan1, &txmsg, mailbox);
 			
 			printf("send ");
 			for(int i = 0;i < 8;i++){
@@ -83,6 +83,9 @@ void CAN_Send_test(void)
 				printf("0x%X ",txmsg.Data[i]);
 			}
 			printf("\r\n");
+			
+			mailbox = (mailbox+1)%3;
+			MX_CANx_send(&hcan1, &txmsg, mailbox);
 		}
 	}
 }

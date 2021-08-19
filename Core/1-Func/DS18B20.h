@@ -11,6 +11,7 @@
 
 #include "conf_gpio.h"
 #include "conf_tim.h"
+#include "func_delay.h"
 void GetTemperature(void);
 
 

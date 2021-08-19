@@ -28,6 +28,9 @@
 
 #include "func_1912.h"
 
+#include "conf_spi.h"
+
+#include "hard_test.h"
 /** @addtogroup Template_Project
   * @{
   */
@@ -179,11 +182,13 @@ void SysTick_Handler(void)
 *************************************************/
 void CAN1_RX0_IRQHandler(void)
 {
+	MSG(" CR - ");
 	HAL_CAN_IRQHandler(&hcan1);
 }
 
 void USB_HP_CAN1_TX_IRQHandler(void)
 {
+	MSG(" CT\r\n");
 	HAL_CAN_IRQHandler(&hcan1);
 }
 
@@ -226,15 +231,33 @@ void TIM1_TRG_COM_IRQHandler(void)
 void USART1_IRQHandler(void)
 {
 	debug_IRQ();
-	HAL_UART_IRQHandler(&huart1);
+//	HAL_UART_IRQHandler(&huart1);
+	
+//	#ifdef HARD_TEST
+//	IDLE_UART_IRQHandler(&huart1);
+//	#endif
+}
+
+#include "func_RS485.h"
+//#define F1912_TEST
+//#define rs485_TEST
+void USART2_IRQHandler(void)
+{
+
+	HAL_UART_IRQHandler(&huart2);			// for func_1912
+	
+	#ifdef F1912_TEST
+	IDLE_UART_IRQHandler(&huart2);			// for func_1912
+	#endif
+	#ifdef rs485_TEST
+	IDLE_UART_IRQHandler(&huart2);
+	#endif
 }
 
 
-void USART2_IRQHandler(void)
+void USART3_IRQHandler(void)
 {
-	HAL_UART_IRQHandler(&huart2);			// for func_192
-	
-	IDLE_UART_IRQHandler(&huart2);			// for func_1912
+  HAL_UART_IRQHandler(&huart3);//HAL���ṩ���жϴ�����
 }
 
 
@@ -264,6 +287,12 @@ void TIM4_IRQHandler(void)
 /**
   * @}
   */ 
+
+void SPI1_IRQHandler(void)
+{
+	HAL_SPI_IRQHandler(&hspi1);
+}
+
 
 
 /******************* (C) COPYRIGHT 2009 STMicroelectronics *****END OF FILE****/

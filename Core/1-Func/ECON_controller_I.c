@@ -2,7 +2,14 @@
 #define controller_TIM TIM4
 #define controller_HTIM htim4
 
-
+/**
+  * @brief  ECON驱动器控制
+  * @hardware 	ECON maxon 驱动器
+				maxon 电机
+  *	@			PWM  战舰开发板
+  * @condition 12V
+  * @year 2020/08/28
+  */
 
 void ECON_action(void)
 {

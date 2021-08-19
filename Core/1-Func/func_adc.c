@@ -50,23 +50,27 @@ TEST getSingleChannelData(void)
 
 
 /**
-  * ready for test.
+  * ready for test. getData from PA15,PA0
  */
 TEST getData(void)
 {
 	MX_ADC2_Init();
 	
+
 	while(1){
-	HAL_ADC_Start(&hadc2);                               //ADC
-	
-    HAL_ADC_PollForConversion(&hadc2, 5);
-	uint16_t data1 = (uint16_t)HAL_ADC_GetValue(&hadc2);
-	
-    HAL_ADC_PollForConversion(&hadc2, 5);
-	uint16_t data2 = (uint16_t)HAL_ADC_GetValue(&hadc2);
-	MSG("%.5f %.5f mV\r\n", (float)data1/4096.0*3300.0, (float)data2/4096.0*3300.0);
-	
-	HAL_Delay(5);
+		
+		HAL_ADC_Start(&hadc2);                               //ADC
+		
+		HAL_ADC_PollForConversion(&hadc2, 50);					//PA0
+		uint16_t data1 = (uint16_t)HAL_ADC_GetValue(&hadc2);
+		
+		HAL_Delay(5);
+			
+		HAL_ADC_PollForConversion(&hadc2, 50);
+		uint16_t data2 = (uint16_t)HAL_ADC_GetValue(&hadc2);
+		MSG("%.5f %.5f mV\r\n", (float)data1/4096.0*3300.0, (float)data2/4096.0*3300.0);
+		
+		HAL_Delay(5);
 	}
 }
 

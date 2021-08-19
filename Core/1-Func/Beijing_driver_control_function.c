@@ -14,6 +14,8 @@
 
 
 //#define DRIVER_TEST
+#ifdef DRIVER_TEST
+
 #define delay_us HAL_Delay
 /**
   * @brief  Hardware Interface. 
@@ -1568,13 +1570,13 @@ void sxy_init_motor(int motor_mode)
 //	motor_enable(0x04);
 }
 
-#ifdef DRIVER_TEST
+
 #include "func_can.h"
 
 //#define ADDR 0x2
 uint8_t ADDR = 0x1;
 #define CURRENT_MODE 0
-TEST expriment_1(void)
+TEST Experiment_I(void)
 {
 //	int error;
 		
@@ -1586,7 +1588,7 @@ TEST expriment_1(void)
 		ERROR(2, "mode set");
 	}
 	HAL_Delay(20);
-	if(motor_set_max_v(1000, ADDR) == 0){
+	if(motor_set_max_v(20, ADDR) == 0){
 		ERROR(2, "v set");
 	}
 	HAL_Delay(20);
@@ -1605,7 +1607,7 @@ TEST expriment_1(void)
 		ERROR(2, "enable");
 	}
 	HAL_Delay(20);
-	if(motor_set_current_value(ADDR, 1000) == 0){
+	if(motor_set_current_value(ADDR, 50) == 0){
 		ERROR(2, "current set");
 	}
 	HAL_Delay(20);
@@ -1631,4 +1633,6 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		MSG("\r\n");
 	}
 }
+
+
 #endif

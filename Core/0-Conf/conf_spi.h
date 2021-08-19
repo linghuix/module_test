@@ -10,7 +10,9 @@
 
 #include "device_bsp.h"
 
-SPI_HandleTypeDef hspi1;
-SPI_HandleTypeDef hspi2;
+void MX_SPIx_Init(SPI_TypeDef * SPI, int masterOrSlave);
+	
+extern SPI_HandleTypeDef hspi1;
+extern SPI_HandleTypeDef hspi2;
 
 #endif /* BSP_CONF_SPI_H_ */

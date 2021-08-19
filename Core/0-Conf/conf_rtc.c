@@ -13,7 +13,9 @@ void RTC_conf(void)
 {
 	RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC;
-	PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_HSE_DIV128;	//精度可达 15s/天 以内
+//	PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_HSE_DIV128;	//精度可达 1s/8.0h 以内
+//	PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;			//精度很高 1s/25.0h 需要在 conf_global.c中 SystemClock_Config 的OscillatorType中选择LSE并开启
+	PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;			//精度很差
 	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK){
 		Error_Handler()
 	}

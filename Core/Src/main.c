@@ -1,5 +1,7 @@
 
+
 #include "main.h"
+
 
 int main(void)
 {
@@ -7,22 +9,29 @@ int main(void)
 	debug_init();
 	
 #ifdef TEST_ON
+	/*---hardware test---*/
+//	test_USART1_communication();
+//	test_USART1_Rcv();
 	
-	printf("beginning\r\n");
-	FSRCollectExperiment();
+
+//	test_GetForce();
+//	test_GetCurrentForce();
+//	printf("beginning\r\n");
+//	FSR_Aver();
+//	test_acc_collect();
 //	test_win_buff();
 //	test_GetCurrentForce();
 //	test_searchID();
 //	ADS_Sampling();
 //	getSingleChannelData();
 //	test_Command();
-//	expriment_1();
+//	Experiment_I();
 //	Dual_DAC_Tri_Output(); 
 //	getData();
 //	ADS_Sampling();
 
 //	ForceCollectExperiment();
-//	systemTimer_init();
+//	systemTimer_test();
 //	debug_init();
 
 //	test_ultrasonic();
@@ -35,7 +44,26 @@ int main(void)
 //	test_SpeedOfBuffer_printf();
 //	CAN_Send_test();
 //	CAN_Rcv_test();
+
+//	current_control();
 	
+//	FSRCollectExperiment();
+
+//	W25QXX_test();
+
+//    spi1_slave_test();
+//	
+//    spi1_master_test();
+//test_GetCurrentForce();
+//	test_GetCurrentForce();
+//	test_RS485();
+	
+//	test_beep();
+
+
+//test_USART3_communication();
+
+pos();
 #endif
 
 

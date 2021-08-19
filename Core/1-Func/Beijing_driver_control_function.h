@@ -76,5 +76,5 @@ void sxy_init_motor(int motor_mode);
 /**
   * @brief  TEST
   */
-TEST expriment_1(void);
+TEST Experiment_I(void);
 #endif

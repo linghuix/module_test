@@ -14,7 +14,8 @@
   */
 
 
-#define FSR_TEST
+//#define FSR_TEST
+
 #define FORCENUMMAX 1
 
 uint8_t FSRforce[FORCENUMMAX];						// force raw data(adc output) store 
@@ -36,7 +37,7 @@ void FSR_Init (void)
 
 
 /**
-  * @brief  Get force value through ADC peripheral.
+  * @brief  Get force value through ADC peripheral. It is not calibrated and handled.
   * @retval ADC value 
   */
 
@@ -49,6 +50,7 @@ uint16_t GetFSRForce (void)
 
 
 float FSROffset=0;		// Offset value at zero external force 
+int fsr_index=0;		// series number of fsr data
 /**
   * @brief  Calcuate the offset at n = OffsetWindowsPosition
   * @retval Offset
@@ -57,7 +59,7 @@ float FSROffset=0;		// Offset value at zero external force
 float GetFSROffset(void)
 {
 	
-	if(OffsetWindowsPosition){
+	if(fsr_index == OffsetWindowsPosition){
 		printf("------------------ offset get --------------------\r\n");
 	}
 
@@ -81,5 +83,28 @@ TEST FSRCollectExperiment(void)
 	}
 }
 
+
+#include "win.h"
+TEST FSR_Aver(void)
+{
+	WIN winbuffer;
+	ElementType data[2] = {0};
+	int size = 2;
+	WinBuffer(&winbuffer, data, size);
+//	float avr;
+//	float weights[2] = {0.01,0.99};
+	float weights[2] = {0.001,0.999};
+	
+	FSR_Init();
+	while(1){
+		FSR_force = GetFSRForce();
+		addToBuff(&winbuffer ,FSR_force);
+		ChangeLastestValue(&winbuffer, AvergeWin(&winbuffer, weights, 2));
+		printf("%f\r\n", getLastestValue(winbuffer));
+//		printf("%d\r\n", FSR_force);
+		HAL_Delay(20);
+	}
+	
+}
 
 #endif

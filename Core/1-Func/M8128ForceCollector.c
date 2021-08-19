@@ -2,24 +2,16 @@
 
 
 /**
-  ******************************************************************************
-  * @file    M8128ForceCollector.c
-  * @author  MCD Application Team
-  * @brief   CAN HAL module driver.
-  *          This file provides firmware functions to manage the following
-  *          functionalities of the Controller Area Network (CAN) peripheral:
-  *           + Initialization and de-initialization functions
-  *           + Configuration functions
-  *           + Control functions
-  *           + Interrupts management
-  *           + Callbacks functions
-  *           + Peripheral State and Error functions
-  *
-  @verbatim
+  * @brief  collecting torque
+  * @hardware 	CAN   原子战舰开发板
+                M8128 力矩传感器
+  *	@			
+  * @condition 12V
+  * @year 2020/08/28
   */
 
 
-#define Force_Collect_TEST
+//#define Force_Collect_TEST
 
 #define FORCENUMMAX 27
 
@@ -206,6 +198,7 @@ float getfilteredForce(void)
 {
 	return forceBuffer.data[getPreviousIndex(forceBuffer.in)] - Offset;
 }
+
 
 
 #ifdef Force_Collect_TEST

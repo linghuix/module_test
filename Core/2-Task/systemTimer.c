@@ -7,6 +7,9 @@
 
 #include "systemTimer.h"
 
+SysTime systime;
+SysTime alarmtime;
+
 
 void getDate(void);
 
@@ -142,4 +145,10 @@ void HAL_RTCEx_RTCEventErrorCallback(RTC_HandleTypeDef *hrtc)
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
 {
 	MSG("alarming！！！！！\r\n");
+}
+
+TEST systemTimer_test(TEST)
+{
+	
+	systemTimer_init();
 }

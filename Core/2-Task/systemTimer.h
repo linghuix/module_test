@@ -22,11 +22,13 @@ typedef struct
   uint8_t Day;
 } SysTime;
 
-SysTime systime;
-SysTime alarmtime;
+extern SysTime systime;
+extern SysTime alarmtime;
 
 void systemTimer_init(void);
 void showTime(void);
 
 TEST testalarm(void);
+
+TEST systemTimer_test(TEST);
 #endif /* TASK_SYSTEMTIMER_H_ */

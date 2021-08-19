@@ -27,19 +27,18 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle);
 void setSource(TIM_HandleTypeDef * htim, uint32_t source){
 	
 	TIM_ClockConfigTypeDef sClockSourceConfig;
-  sClockSourceConfig.ClockSource = source;
-  if (HAL_TIM_ConfigClockSource(htim, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler()
-  }
+	sClockSourceConfig.ClockSource = source;
+	if (HAL_TIM_ConfigClockSource(htim, &sClockSourceConfig) != HAL_OK){
+		Error_Handler()
+	}
 }
 
 void setOutputCompare(TIM_HandleTypeDef * htim)
-	{
+{
 	TIM_OC_InitTypeDef sConfigOC;
 	
-	if(htim->Instance == TIM4)
-		{
+	if(htim->Instance == TIM4){
+		
 		sConfigOC.OCMode = TIM_OCMODE_PWM1;
 		sConfigOC.Pulse = 0;
 		sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
@@ -283,6 +282,7 @@ void MX_TIM_CaptureInterrupt(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
 	TIM_ClockConfigTypeDef sClockSourceConfig = {0};
 
 	if(TIM == TIM1){
+		MSG_BSTART("tim1","CaptureInterrupt");
 		htim1.Instance = TIM1;
 		htim1.Init.Prescaler = HAL_RCC_GetPCLK2Freq()/Hz;//72MHz APB1 1MHz
 		htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -309,6 +309,7 @@ void MX_TIM_CaptureInterrupt(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
 //		}
 
 		TIM_CaputureChannel(TIM1, TIM_INPUTCHANNELPOLARITY_RISING, TIM_CHANNEL_3);
+		MSG_ASTART("tim1","CaptureInterrupt");
 	}
 }
 
@@ -353,6 +354,7 @@ void MX_TIM_PWMOUT(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
 void TIMx_CountSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)	//TIM miu_s
 {
 	if(TIM == TIM2){
+		MSG_BSTART("tim2","CountInterrupt");
 		htim2.Instance = TIM2;
 		htim2.Init.ClockDivision = 0;
 		htim2.Init.Prescaler = HAL_RCC_GetPCLK2Freq()/Hz;//APB1 1MHz
@@ -362,9 +364,10 @@ void TIMx_CountSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)	//TIM miu_s
 		if (HAL_TIM_Base_Init(&htim2) != HAL_OK){
 			Error_Handler()
 		}
+		MSG_ASTART("tim2","CountInterrupt");
 	}
 	else if(TIM == TIM4){
-
+		MSG_BSTART("tim4","CountInterrupt");
 		htim4.Instance = TIM4;
 		if(HAL_RCC_GetHCLKFreq()/HAL_RCC_GetPCLK1Freq() == 1)
 			htim4.Init.Prescaler = HAL_RCC_GetPCLK1Freq()/Hz;//APB1 1MHz
@@ -379,6 +382,7 @@ void TIMx_CountSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)	//TIM miu_s
 		if (HAL_TIM_Base_Init(&htim4) != HAL_OK){
 			Error_Handler()
 		}
+		MSG_ASTART("tim4","CountInterrupt");
 	}
 }
 
@@ -436,6 +440,7 @@ void TIM_PWMSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
 	TIM_OC_InitTypeDef sConfigOC;
 	TIMx_CountSet(TIM, Hz, period);	//counter set
 	if(TIM == TIM4){
+		MSG_BSTART("tim4","pwm");
 		if (HAL_TIM_PWM_Init(&htim4) != HAL_OK){
 			Error_Handler()
 		}
@@ -447,6 +452,7 @@ void TIM_PWMSet(TIM_TypeDef * TIM, uint32_t Hz, uint32_t period)
 			Error_Handler()
 		}
 		//HAL_TIM_MspPostInit(&htim4);
+		MSG_ASTART("tim4","pwm");
 	}
 }
 

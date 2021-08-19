@@ -36,7 +36,7 @@ uint8_t test_data[5] = {0x55,0x00,0x00,0x00,0x00};
 void Acc2_Start(void)
 {
 	//HAL_UART_Transmit_IT(&acc2_huart, test_data, 5);
-	HAL_UART_Receive_IT(&acc2_huart, acc2, 11);
+	HAL_UART_Receive_IT(&acc2_huart, acc2, 1);
 }
 
 
@@ -48,6 +48,14 @@ void Acc1_Start(void)
 }
 
 #ifdef ACC_TEST
+
+TEST acc_test(void){
+	
+	 Acc1_Init(); 
+	 Acc1_Start();
+	
+}
+
 uint8_t state1 = 0;
 uint8_t state2 = 0;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
@@ -132,24 +140,24 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-	if(huart->Instance == USART1){
-	    //imu_2_flag = 1;
-		HAL_UART_Receive_IT(&huart1, acc1, 6);
-		HAL_UART_Transmit_IT(&huart1, acc1, 6);
-	}
-	if(huart->Instance == acc1_uart){
-	    //imu_2_flag = 1;
-		HAL_UART_Receive_IT(&acc1_huart, acc1, 6);
-		HAL_UART_Transmit_IT(&acc1_huart, acc1, 6);
-	}
-	if(huart->Instance == acc2_uart){
-	    //imu_2_flag = 1;
-		HAL_UART_Receive_IT(&acc2_huart, acc2, 6);
-		HAL_UART_Transmit_IT(&acc2_huart, acc2, 6);
-	}
-}
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+//{
+//	if(huart->Instance == USART1){
+//	    //imu_2_flag = 1;
+//		HAL_UART_Receive_IT(&huart1, acc1, 6);
+//		HAL_UART_Transmit_IT(&huart1, acc1, 6);
+//	}
+//	if(huart->Instance == acc1_uart){
+//	    //imu_2_flag = 1;
+//		HAL_UART_Receive_IT(&acc1_huart, acc1, 6);
+//		HAL_UART_Transmit_IT(&acc1_huart, acc1, 6);
+//	}
+//	if(huart->Instance == acc2_uart){
+//	    //imu_2_flag = 1;
+//		HAL_UART_Receive_IT(&acc2_huart, acc2, 6);
+//		HAL_UART_Transmit_IT(&acc2_huart, acc2, 6);
+//	}
+//}
 
 
 /*
@@ -171,5 +179,39 @@ TEST test_acc_communication(void)
 	uint8_t test_data[5] = {0x55,0x66,0x22,0x33,0x44};
 	HAL_UART_Transmit_IT(&acc1_huart, test_data, 1);
 	HAL_UART_Transmit_IT(&acc2_huart, test_data, 5);
+}
+
+/*代码启动*/
+float hip1_w, hip1_d, I1;
+float hip2_w, hip2_d, I2;
+float hip1_raww, hip1_rawd;
+float hip2_raww, hip2_rawd;
+
+// Jscope 调试
+int debug_hip1_d, debug_hip1_rawd, debug_hip2_d, debug_hip2_rawd;
+TEST test_acc_collect(void)
+{
+//	Acc1_Init();
+	Acc2_Init();
+//	Acc1_Start();
+	Acc2_Start();
+	
+	while (1){
+
+		/* 左髋关节 加速度信号采集  采样周期约100Hz以上 */
+//		if(flag_1 ==1&&flag_2 == 1&&flag_3 == 1){
+//			flag_1=0;flag_2=0;flag_3=0;
+//			hip1_rawd = angle1[1]/32768.0*180;	hip1_raww = w1[2]/32768.0*2000;
+//		}
+
+		/* 右髋关节 加速度信号采集  采样周期约100Hz以上 */
+		if(flag_11 ==1&&flag_22 == 1&&flag_33 == 1){
+			flag_11=0;flag_22=0;flag_33=0;
+			hip2_rawd = angle2[1]/32768.0*180;	hip2_raww = w2[1]/32768.0*2000;
+		}
+		
+//		debug_hip1_rawd = (int)hip1_rawd;
+		debug_hip2_rawd = 1000*hip2_rawd;
+	}
 }
 #endif

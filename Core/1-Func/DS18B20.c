@@ -25,11 +25,11 @@ void DS18B20_Init(void)
 
 
 
-void delay_us(uint32_t us)
-{
-	uint32_t time = getTimeCount(Delay_source);
-	while(us> (time-getTimeCount(Delay_source)));
-}
+//void delay_us(uint32_t us)
+//{
+//	uint32_t time = getTimeCount(Delay_source);
+//	while(us> (time-getTimeCount(Delay_source)));
+//}
 
 
 uint8_t Reset_DS18B20(void)

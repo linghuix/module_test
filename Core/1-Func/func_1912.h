@@ -19,6 +19,7 @@ extern float F_1912;
 
 TEST test1912_forceCollector_communication(void);
 TEST test_GetCurrentForce(void);
+TEST test_GetForce(void);
 TEST test_CheckSum(void);
 TEST test_Command(void);
 TEST test_searchID(void);

@@ -12,5 +12,7 @@ TEST FSR_test(void);
 
 TEST FSRCollectExperiment(void);
 
+TEST FSR_Aver(void);
+
 #endif // __BSP_H
 

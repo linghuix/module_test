@@ -17,7 +17,7 @@ I2C_HandleTypeDef hi2c2;
   */
 void MX_I2C1_Init(void)
 {
-  MSG_BSTART("I2C1","Conf");
+  MSG_BSTART("I2C1","conf");
   hi2c1.Instance = I2C1;
   hi2c1.Init.ClockSpeed = 100000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
@@ -31,7 +31,7 @@ void MX_I2C1_Init(void)
   {
     Error_Handler()
   }
-  MSG_ASTART("I2C1","Conf");
+  MSG_ASTART("I2C1","conf");
 }
 
 /**
@@ -41,7 +41,7 @@ void MX_I2C1_Init(void)
   */
 void MX_I2C2_Init(void)
 {
-  MSG_BSTART("I2C2","Conf");
+  MSG_BSTART("I2C2","conf");
 	
   hi2c2.Instance = I2C2;
   hi2c2.Init.ClockSpeed = 400000;
@@ -56,7 +56,7 @@ void MX_I2C2_Init(void)
   {
     Error_Handler()
   }
-  MSG_ASTART("I2C2","Conf");
+  MSG_ASTART("I2C2","conf");
 }
 
 
