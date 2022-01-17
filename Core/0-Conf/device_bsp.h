@@ -9,16 +9,12 @@
 #define __DEVICE_BSP_H_
 
 
-#include "stm32f1xx_hal.h"
-#include "stdio.h"
-#include "math.h"
 
-#include "debug.h"
+#include "stdio.h"				//C代码头文件
+#include "math.h"				//数学符号库
+#include "stm32f1xx.h"			//包含 //#include "stm32f1xx_hal.h"		//HAL库函数名
 
-#define TEST void
-#define TEST_ON
+#include "debug.h"				//串口调试助手函数名
 
-
-#define Error_Handler() ERROR(3,"init error!"); //while(1);
 
 #endif /* BSP_DEVICE_BSP_H_ */

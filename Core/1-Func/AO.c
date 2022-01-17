@@ -1,5 +1,5 @@
-#include "AO.h"
 
+#include "AO.h"
 
 float abs(float x)
 {
@@ -87,7 +87,7 @@ void set(struct Adaptive_Oscillators* AO, float vw,float va,float vph, int order
 }
 
 
-/*
+/**
     va - 幅值学习参数
     vw - 频率学习参数
     vph - 相位学习参数
@@ -181,76 +181,6 @@ void input(struct Adaptive_Oscillators* AO, float y_now, float t_now, int predic
 		}
 }
 
-void test_Osc(void)
-{
-    struct Adaptive_Oscillators hip;
-    float va,vw,vph,dt,aa[2] = {0.0, 5.0},pphh[2] = {0,0};
-    int step;
-    float pi = 3.1415926;
-    
-    va = 2*pi/5 * 5;	// 5T
-    vw = va;
-    vph = sqrt(24.2*vw);
-    dt = 0.01;
-    step = 10;
-    
-    set(&hip,vw,va,vph,1,dt,5,aa,pphh,step);
-    show(&hip);
-    Oscillators(&hip,0.125,0,0);
-    show(&hip);
-}
-
-void test_Pre(void)
-{
-    float pre; /*Ԥ��ֵ*/
-    struct Adaptive_Oscillators hip;
-    float va,vw,vph,dt,aa[2] = {1.25, 3.523},pphh[2] = {0,0};
-    int step;
-    float pi = 3.1415926;
-
-    va = 2*pi/5 * 5;
-    vw = va;
-    vph = sqrt(24.2*vw);
-    dt = 0.01;
-    step = 10;
-
-    set(&hip,vw,va,vph,1,dt,4,aa,pphh,step);
-    show(&hip);
-    pre = predict(&hip, 10);
-    printf("pre = %.5f, truth value = 4.466306118313432",pre);
-}
-
-
-void test_AO(void)
-{
-    struct Adaptive_Oscillators hip;
-    float va,vw,dt,aa[2] = {0.0, 15.0},pphh[2] = {0,0};
-    int step;
-    float pi = 3.1415926;
-
-	dt = 0.02;
-    va = 2*pi/(23*dt) * 2;
-    vw = va;
-    step = 10;
-    
-    set(&hip,vw,va,sqrt(24.2*vw),1,dt,15,aa,pphh,step);
-    //show(&hip);
-
-    float y;
-    uint8_t predict_step = 1;
-    uint64_t j=0;
-    while(j++ < 5000000000){
-        y = 30*sin(23*j*dt+56)+20;
-        input(&hip,y,j,predict_step,0,0);
-        printf("%.2f\t%.2f\r\n",y, hip.predict);
-        //show(&hip);
-		HAL_Delay(20);
-    }
-
-}
-
-
-
 uint8_t Isequal(float i, float j)
 {
 	if(abs(i-j)<5){
@@ -258,7 +188,6 @@ uint8_t Isequal(float i, float j)
 	}
 	return 0;
 }
-
 
 
 uint8_t predict_step = 5;
@@ -278,7 +207,7 @@ void AO_Init(void)
 	vph = sqrt(24.2*vw);
     step = 2;
     
-    //set(&hip1,vw,va,vph,1,dt,2,aa,pphh,step);
+  //set(&hip1,vw,va,vph,1,dt,2,aa,pphh,step);
 	//set(&hip2,vw,va,vph,1,dt,2,aa,pphh,step);
 	set(&hip1,vw,va,vph,1,dt,1,aa,pphh,step);
 	set(&hip2,vw,va,vph,1,dt,1,aa,pphh,step);
@@ -370,3 +299,83 @@ float assive_torque(struct Adaptive_Oscillators * AO, float d)
 	return assistive_torque;
 
 }
+
+
+
+/**
+  ******************************************************************************
+  * @section    Test
+  * @author  xlh
+  * @brief   
+  ******************************************************************************
+  */
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TEST @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+void test_Osc(void)
+{
+    struct Adaptive_Oscillators hip;
+    float va,vw,vph,dt,aa[2] = {0.0, 5.0},pphh[2] = {0,0};
+    int step;
+    float pi = 3.1415926;
+    
+    va = 2*pi/5 * 5;	// 5T
+    vw = va;
+    vph = sqrt(24.2*vw);
+    dt = 0.01;
+    step = 10;
+    
+    set(&hip,vw,va,vph,1,dt,5,aa,pphh,step);
+    show(&hip);
+    Oscillators(&hip,0.125,0,0);
+    show(&hip);
+}
+
+void test_Pre(void)
+{
+    float pre; /*Ԥ��ֵ*/
+    struct Adaptive_Oscillators hip;
+    float va,vw,vph,dt,aa[2] = {1.25, 3.523},pphh[2] = {0,0};
+    int step;
+    float pi = 3.1415926;
+
+    va = 2*pi/5 * 5;
+    vw = va;
+    vph = sqrt(24.2*vw);
+    dt = 0.01;
+    step = 10;
+
+    set(&hip,vw,va,vph,1,dt,4,aa,pphh,step);
+    show(&hip);
+    pre = predict(&hip, 10);
+    printf("pre = %.5f, truth value = 4.466306118313432",pre);
+}
+
+
+void test_AO(void)
+{
+    struct Adaptive_Oscillators hip;
+    float va,vw,dt,aa[2] = {0.0, 15.0},pphh[2] = {0,0};
+    int step;
+    float pi = 3.1415926;
+
+	  dt = 0.02;
+    va = 2*pi/(23*dt) * 2;
+    vw = va;
+    step = 10;
+    
+    set(&hip,vw,va,sqrt(24.2*vw),1,dt,15,aa,pphh,step);
+    //show(&hip);
+
+    float y;
+    uint8_t predict_step = 1;
+    uint64_t j=0;
+    while(j++ < 5000000000){
+        y = 30*sin(23*j*dt+56)+20;
+        input(&hip,y,j,predict_step,0,0);
+        printf("%.2f\t%.2f\r\n",y, hip.predict);
+        //show(&hip);
+		HAL_Delay(20);
+    }
+
+}
+

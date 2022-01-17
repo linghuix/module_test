@@ -78,3 +78,13 @@ void SPIx_NVIC(SPI_HandleTypeDef* hspi)
     HAL_NVIC_EnableIRQ(SPI1_IRQn);
 	}
 }
+
+
+/**
+  * @}
+  */ 
+
+void SPI1_IRQHandler(void)
+{
+	HAL_SPI_IRQHandler(&hspi1);
+}

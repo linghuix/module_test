@@ -10,6 +10,7 @@ int main(void)
 	
 #ifdef TEST_ON
 	/*---hardware test---*/
+//	hard_test();
 //	test_USART1_communication();
 //	test_USART1_Rcv();
 	
@@ -37,8 +38,9 @@ int main(void)
 //	test_ultrasonic();
 //	LED_init();
 //	
-//	Servo_Init();
-//	Servo_Start()CANOpen_Inital;
+
+//	test_beep();
+//	Test_Servos();
 
 //	test_printf();
 //	test_SpeedOfBuffer_printf();
@@ -60,14 +62,19 @@ int main(void)
 	
 //	test_beep();
 
+	MX_GPIO_EXIT_Init();
 
 //test_USART3_communication();
 
-pos();
+
+//pos();
 #endif
 
 
-	while(1){ 	}
+	while(1){ 	
+		printf("running...\r\n");
+		HAL_Delay(1000);
+	}
 	//return 0;
  }
 

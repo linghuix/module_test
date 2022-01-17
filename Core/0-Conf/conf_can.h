@@ -16,7 +16,6 @@
 extern CAN_HandleTypeDef hcan1;
 
 
-
 #define SJW SyncJumpWidth
 #define BS1 TimeSeg1
 #define BS2 TimeSeg2
@@ -53,12 +52,32 @@ extern CAN_HandleTypeDef hcan1;
 #endif
 
 
+/**
+  * @brief CAN send package structure
+
+	typedef struct
+	{
+		uint32_t StdId;    Specifies the standard identifier. between 0 and 0x7FF
+		uint32_t ExtId;    Specifies the extended identifier. between 0 and 0x1FFFFFFF.
+		uint32_t IDE;      Specifies the type of identifier.  #define CAN_ID_STD, #define CAN_ID_EX
+		uint32_t RTR;      Specifies the type of frame for the message. #define CAN_RTR_DATA, #define CAN_RTR_REMOT
+		uint32_t DLC;      Specifies the length of the frame. between 0 and 8.
+		FunctionalState TransmitGlobalTime; Specifies whether the timestamp counter value captured on start
+														of frame transmission, is sent in DATA6 and DATA7 replacing Data[6] and Data[7].
+														@note: Time Triggered Communication Mode must be enabled.
+														@note: DLC must be programmed as 8 bytes, in order these 2 bytes are sent.
+														This parameter can be set to ENABLE or DISABLE. 
+	} CAN_TxHeaderTypeDef
+*/
 typedef struct {
 	CAN_TxHeaderTypeDef head;
-	uint8_t Data[8];
+	uint8_t Data[8];						// can message
 } CanTxMsg;
 
 
+/**
+  * @brief CAN receive package structure
+  */
 typedef struct {
 	CAN_RxHeaderTypeDef head;
 	uint8_t Data[8];
@@ -72,6 +91,5 @@ typedef struct {
 void MX_CAN1_Init(uint32_t mode);
 void CanFilter_Init(CAN_HandleTypeDef* hcan, uint32_t FILTER_FIFO);
 void MX_CAN1_Test_Init(uint32_t mode);
-#endif /* _BSP_CAN_H */
 
-/**** Copyright (C)2018 strongerHuang. All Rights Reserved **** END OF FILE ****/
+#endif /* _BSP_CAN_H */

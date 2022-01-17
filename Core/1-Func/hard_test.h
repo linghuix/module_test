@@ -1,4 +1,4 @@
-#ifndef _HARD_test_H_
+ #ifndef _HARD_test_H_
 #define _HARD_test_H_
 
 #include "conf_usart.h"
@@ -10,4 +10,6 @@ TEST IDLE_UART_IRQHandler(UART_HandleTypeDef *huart);
 
 
 TEST test_USART3_communication(void);
+
+void hard_test(void);
 #endif

@@ -936,7 +936,7 @@ int motor_continue_curve_control(int *ptr_can, int motor_address, int control_si
 	}
 }
 
-#define A
+//#define A
 #ifdef A
 int ptr = 10, address = 2;
 TEST pos(TEST)

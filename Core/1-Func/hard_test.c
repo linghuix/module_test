@@ -11,11 +11,13 @@
 */
 
 //#define HARD_TEST
-
 /* Include ---------------------------------------*/
 #include "hard_test.h"
 
 //#define USART3_TEST
+//#define USART4_TEST
+#define USART5_TEST
+
 /* Global Variable -------------------------------*/
 
 
@@ -195,4 +197,81 @@ TEST HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 }
 #endif
 
+#ifdef USART4_TEST
+
+int u3_length=0;
+uint8_t u3_receivebyte;
+/**
+  * @brief  test transmit of usart2
+  * @note 
+  * @note 
+  * @retval 
+  */
+	
+uint8_t HardwareTestData[10] = {0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x66,0x55,0x44}, u3_CommandReceive[20]={0};
+
+TEST test_UART4_communication(void)
+{
+	MX_UART4_UART_Init();
+	
+	HAL_UART_Transmit_IT(&huart4, HardwareTestData, 10);
+	HAL_UART_Receive_IT(&huart4, &u3_receivebyte, 1);
+}
+
+
+TEST HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	
+	if(huart->Instance == UART4){
+		TEST_MSG("U3rcv[%d] ", u3_length);
+		TEST_MSG("0x%x\t", u3_receivebyte);
+//		u3_CommandReceive[u3_length] = u3_receivebyte;
+		u3_length++;
+		HAL_UART_Receive_IT(&huart3, &u3_receivebyte, 1);
+	}
+	
+}
+#endif
+
+#ifdef USART5_TEST
+
+int u3_length=0;
+uint8_t u3_receivebyte;
+/**
+  * @brief  test transmit of usart2
+  * @note 
+  * @note 
+  * @retval 
+  */
+	
+uint8_t HardwareTestData[10] = {0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x66,0x55,0x44}, u3_CommandReceive[20]={0};
+
+TEST test_UART5_communication(void)
+{
+	MX_UART5_UART_Init();
+	
+	HAL_UART_Transmit_IT(&huart5, HardwareTestData, 10);
+	HAL_UART_Receive_IT(&huart5, &u3_receivebyte, 1);
+}
+
+
+TEST HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	
+	if(huart->Instance == UART5){
+		TEST_MSG("U3rcv[%d] ", u3_length);
+		TEST_MSG("0x%x\t", u3_receivebyte);
+//		u3_CommandReceive[u3_length] = u3_receivebyte;
+		u3_length++;
+		HAL_UART_Receive_IT(&huart3, &u3_receivebyte, 1);
+	}
+	
+}
+#endif
+
+void hard_test(void)
+{
+//	test_UART4_communication();
+	test_UART5_communication();
+}
 

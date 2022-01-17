@@ -1,158 +1,40 @@
 
+/* Includes ------------------------------------------------------------------*/
 #include "conf_usart.h"
 //#include "conf_global.h""
 
-
-/* gobal variable*/
 GPIO_InitTypeDef GPIO_InitStruct;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
+UART_HandleTypeDef huart4;
+UART_HandleTypeDef huart5;
 
 DMA_HandleTypeDef hdma_usart1_rx;
 
 
-
-/**
-  * @brief USART1 Function Initialization
-  * @param None
-  * @retval None
-  */
+/* USART1 init function */
 void MX_USART1_UART_Init(void)
 {
-    MSG_BSTART("usart1","conf");
-    huart1.Instance = USART1;
-    huart1.Init.BaudRate = 115200;
-    huart1.Init.WordLength = UART_WORDLENGTH_8B;
-    huart1.Init.StopBits = UART_STOPBITS_1;
-    huart1.Init.Parity = UART_PARITY_NONE;
-    huart1.Init.Mode = UART_MODE_TX_RX;
-    huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 115200;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
 	
-    if (HAL_UART_Init(&huart1) != HAL_OK){
-        Error_Handler()
-    }
-    MSG_ASTART("usart1","conf");
+  if (HAL_UART_Init(&huart1) != HAL_OK){
+    Error_Handler()
+  }
 }
 
 
-
-/**
-  * @author lhx  May 13, 2020
-  * @brief  usart hardware initalization      
-  * 		引脚初始化, 时钟开启
-  * @calledIn HAL_UART_MspInit()
-  * @param  uartHandle: UART Handler
-  * @retval None
-  */
-void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
-{
-    if(uartHandle->Instance==USART1)
-    {
-		/*
-		UART1 TX —— PA9
-		UART1 RX —— PA10
-		*/
-		__HAL_RCC_USART1_CLK_ENABLE();
-		__HAL_RCC_GPIOA_CLK_ENABLE();
-
-		GPIO_InitStruct.Pin = GPIO_PIN_10;
-		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-		GPIO_InitStruct.Pin = GPIO_PIN_9;
-		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    }
-    else if(uartHandle->Instance==USART2)
-    {
-		/* Peripheral clock enable */
-		__HAL_RCC_USART2_CLK_ENABLE();
-		__HAL_RCC_GPIOA_CLK_ENABLE();
-
-		/**USART2 GPIO Configuration
-		PA3     ------> USART2_RX
-		PA2     ------> USART2_TX
-		*/
-		GPIO_InitStruct.Pin = GPIO_PIN_2;
-		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-		GPIO_InitStruct.Pin = GPIO_PIN_3;
-		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    }
-    else if(uartHandle->Instance==USART3)
-    {
-		/* Peripheral clock enable */
-		__HAL_RCC_USART3_CLK_ENABLE();
-		__HAL_RCC_GPIOB_CLK_ENABLE();
-
-		/**USART3 GPIO Configuration
-		PB11     ------> USART3_RX
-		PB10     ------> USART3_TX
-		*/
-
-		GPIO_InitStruct.Pin = GPIO_PIN_10;
-		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-		GPIO_InitStruct.Pin = GPIO_PIN_11;
-		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-		GPIO_InitStruct.Pull = GPIO_NOPULL;
-		HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-    }
-}
-
-
-
-/**
-  * @author lhx  May 13, 2020
-  * @brief  串口中断功能设置(注意此处并没有激活/启用中断功能)
-  * @param  uartHandle: UART Handler
-  * @retval None
-  */
-void USART_NVIC_Init(UART_HandleTypeDef* uartHandle)
-{
-    if(uartHandle->Instance==USART1)
-    {
-		HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
-		HAL_NVIC_EnableIRQ(USART1_IRQn);
-
-    }
-    else if(uartHandle->Instance==USART2)
-    {
-		HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
-		HAL_NVIC_EnableIRQ(USART2_IRQn);
-		//__HAL_UART_ENABLE_IT(&huart2,UART_IT_RXNE);
-    }
-    else if(uartHandle->Instance==USART3)
-    {
-		/* Peripheral interrupt init */
-		HAL_NVIC_SetPriority(USART3_IRQn, 0, 2);
-		HAL_NVIC_EnableIRQ(USART3_IRQn);
-    }
-}
-
-
-
-
-/**
-  * @brief USART2 Function Initialization
-  * @param None
-  * @retval None
-  */
 void MX_USART2_UART_Init(void)
 {
-  MSG_BSTART("usart2","conf");
+
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -166,20 +48,12 @@ void MX_USART2_UART_Init(void)
     Error_Handler()
   }
 
-  MSG_ASTART("usart2","conf");
 }
 
 
-
-
-/**
-  * @brief USART3 Function Initialization
-  * @param None
-  * @retval None
-  */
 void MX_USART3_UART_Init(void)
 {
-MSG_BSTART("usart3","conf");
+
   huart3.Instance = USART3;
   huart3.Init.BaudRate = 115200;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
@@ -192,21 +66,227 @@ MSG_BSTART("usart3","conf");
   {
     Error_Handler()
   }
-MSG_ASTART("usart3","conf");
+
 }
 
 
+/* UART4 init function */
+void MX_UART4_UART_Init(void)
+{
+  huart4.Instance = UART4;
+  huart4.Init.BaudRate = 115200;
+  huart4.Init.WordLength = UART_WORDLENGTH_8B;
+  huart4.Init.StopBits = UART_STOPBITS_1;
+  huart4.Init.Parity = UART_PARITY_NONE;
+  huart4.Init.Mode = UART_MODE_TX_RX;
+  huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart4.Init.OverSampling = UART_OVERSAMPLING_16;
+	
+  if (HAL_UART_Init(&huart4) != HAL_OK){
+    Error_Handler()
+  }
+}
 
+/* UART5 init function */
+void MX_UART5_UART_Init(void)
+{
+  huart5.Instance = UART5;
+  huart5.Init.BaudRate = 115200;
+  huart5.Init.WordLength = UART_WORDLENGTH_8B;
+  huart5.Init.StopBits = UART_STOPBITS_1;
+  huart5.Init.Parity = UART_PARITY_NONE;
+  huart5.Init.Mode = UART_MODE_TX_RX;
+  huart5.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart5.Init.OverSampling = UART_OVERSAMPLING_16;
+	
+  if (HAL_UART_Init(&huart5) != HAL_OK){
+    Error_Handler()
+  }
+}
 
 /**
-  * @author lhx  May 13, 2020
-  * @brief  USART MCU Specific Package Initialization
-  * @calledIn HAL_UART_Init()，用于硬件初始化
-  * @call   USART_Hardware_Init()
-  *         USART_NVIC_Init()
-  * @param  uartHandle: UART Handler
-  * @retval None
-  */ 
+ * author lhx
+ * May 13, 2020
+ *
+ * @brief : 调用自HAL_UART_MspInit
+ * 			引脚初始化
+ * 			时钟开启
+ * 
+ */
+
+void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
+{
+    if(uartHandle->Instance==USART1)
+    {
+		/*
+		UART1 TX - PA9
+		UART1 RX - PA10
+		*/
+		__HAL_RCC_USART1_CLK_ENABLE();
+		__HAL_RCC_GPIOA_CLK_ENABLE();
+		
+		//    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+		//    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		//    GPIO_InitStruct.Pull = GPIO_NOPULL;
+		//    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+		//    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+		GPIO_InitStruct.Pin = GPIO_PIN_10;
+		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+		GPIO_InitStruct.Pin = GPIO_PIN_9;
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    }
+    else if(uartHandle->Instance==USART2)
+    {
+
+      /* Peripheral clock enable */
+      __HAL_RCC_USART2_CLK_ENABLE();
+      __HAL_RCC_GPIOA_CLK_ENABLE();
+
+      /**USART2 GPIO Configuration
+      PA3     ------> USART2_RX
+      PA2     ------> USART2_TX
+      */
+    GPIO_InitStruct.Pin = GPIO_PIN_2;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_3;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    }
+    else if(uartHandle->Instance==USART3)
+    {
+      /* Peripheral clock enable */
+      __HAL_RCC_USART3_CLK_ENABLE();
+      __HAL_RCC_GPIOB_CLK_ENABLE();
+
+      /**USART3 GPIO Configuration
+      PB11     ------> USART3_RX
+      PB10     ------> USART3_TX
+      */
+      
+	/*GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11;  这种配置，可以发送，但是不能接受数据
+      GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+      GPIO_InitStruct.Pull = GPIO_NOPULL;
+      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+      HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);*/
+
+    GPIO_InitStruct.Pin = GPIO_PIN_10;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_11;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    }
+
+    else if(uartHandle->Instance==UART4)
+    {
+
+		/* Peripheral clock enable */
+		__HAL_RCC_UART4_CLK_ENABLE();
+	  
+		__HAL_RCC_GPIOC_CLK_ENABLE();
+		/**UART4 GPIO Configuration    
+		PC10     ------> UART4_TX
+		PC11     ------> UART4_RX 
+		*/
+		GPIO_InitStruct.Pin = GPIO_PIN_10;
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+		GPIO_InitStruct.Pin = GPIO_PIN_11;
+		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    }
+	
+    else if(uartHandle->Instance==UART5)
+    {
+		/* Peripheral clock enable */
+		__HAL_RCC_UART5_CLK_ENABLE();
+	  
+		__HAL_RCC_GPIOC_CLK_ENABLE();
+		__HAL_RCC_GPIOD_CLK_ENABLE();
+		
+		/**UART5 GPIO Configuration    
+			PC12     ------> UART5_TX
+			PD2     ------> UART5_RX 
+		*/
+		GPIO_InitStruct.Pin = GPIO_PIN_12;
+		GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+		HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+		GPIO_InitStruct.Pin = GPIO_PIN_2;
+		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+		GPIO_InitStruct.Pull = GPIO_NOPULL;
+		HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+    }
+}
+
+/*
+ * author lhx
+ * May 13, 2020
+ *
+ * @brief : 串口中断功能设置和开启
+ * 
+ */
+void USART_NVIC_Init(UART_HandleTypeDef* uartHandle)
+{
+    if(uartHandle->Instance==USART1)
+    {
+		HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+		HAL_NVIC_EnableIRQ(USART1_IRQn);
+
+    }
+    else if(uartHandle->Instance==USART2)
+    {
+		HAL_NVIC_SetPriority(USART2_IRQn, 0, 2);
+		HAL_NVIC_EnableIRQ(USART2_IRQn);
+    }
+    else if(uartHandle->Instance==USART3)
+    {
+		/* Peripheral interrupt init */
+		HAL_NVIC_SetPriority(USART3_IRQn, 0, 1);
+		HAL_NVIC_EnableIRQ(USART3_IRQn);
+    }
+    else if(uartHandle->Instance==UART4)
+    {
+		/* UART4 interrupt Init */
+		HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
+		HAL_NVIC_EnableIRQ(UART4_IRQn);
+    }
+    else if(uartHandle->Instance==UART5)
+    {
+		/* UART5 interrupt Init */
+		HAL_NVIC_SetPriority(UART5_IRQn, 0, 0);
+		HAL_NVIC_EnableIRQ(UART5_IRQn);
+    }
+}
+
+/*
+ * author lhx
+ * May 13, 2020
+ *
+ * @brief : 调用自 HAL_UART_Init，用于硬件初始化
+ * 
+ */
+
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 {
 	USART_Hardware_Init(uartHandle);
@@ -214,14 +294,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 }
 
 
-
-
-/**
-  * @author lhx  May 13, 2020
-  * @brief  USART MCU Specific Package De-Initialization
-  * @param  uartHandle: UART Handler
-  * @retval None
-  */ 
 void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 {
 
@@ -245,6 +317,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   }
   else if(uartHandle->Instance==USART2)
   {
+  /* USER CODE BEGIN USART2_MspDeInit 0 */
+
+  /* USER CODE END USART2_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_USART2_CLK_DISABLE();
   
@@ -257,10 +332,12 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     /* Peripheral interrupt Deinit*/
     HAL_NVIC_DisableIRQ(USART2_IRQn);
 
+  /* USER CODE BEGIN USART2_MspDeInit 1 */
+
+  /* USER CODE END USART2_MspDeInit 1 */
   }
   else if(uartHandle->Instance==USART3)
   {
-
     /* Peripheral clock disable */
     __HAL_RCC_USART3_CLK_DISABLE();
   
@@ -274,13 +351,97 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     HAL_NVIC_DisableIRQ(USART3_IRQn);
 
   }
+  else if(uartHandle->Instance==UART4)
+  {
+	/* Peripheral clock disable */
+    __HAL_RCC_UART4_CLK_DISABLE();
+  
+    /**UART4 GPIO Configuration    
+    PC10     ------> UART4_TX
+    PC11     ------> UART4_RX 
+    */
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_11);
+
+    /* UART4 interrupt DeInit */
+    HAL_NVIC_DisableIRQ(UART4_IRQn);
+  }
+  else if(uartHandle->Instance==UART4)
+  {
+	/* Peripheral clock disable */
+    __HAL_RCC_UART4_CLK_DISABLE();
+  
+    /**UART4 GPIO Configuration    
+    PC10     ------> UART4_TX
+    PC11     ------> UART4_RX 
+    */
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_11);
+
+    /* UART4 interrupt DeInit */
+    HAL_NVIC_DisableIRQ(UART4_IRQn);
+  }
 } 
 
 
-/*void USART_init(void)*/
-/*{*/
-/*	MX_USART1_UART_Init();*/
-/*	MX_USART2_UART_Init();*/
-/*}*/
+TEST HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart->Instance == USART1){
+		
+	}
+	if(huart->Instance == USART2){
+		
+	}
+	if(huart->Instance == USART3){
+		
+	}
+}
 
 
+void USART2_IRQHandler(void)
+{
+
+	HAL_UART_IRQHandler(&huart2);			// for func_1912
+	
+	#ifdef F1912_TEST
+	IDLE_UART_IRQHandler(&huart2);			// for func_1912
+	#endif
+	#ifdef rs485_TEST
+	IDLE_UART_IRQHandler(&huart2);
+	#endif
+}
+
+
+void USART3_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&huart3);//HAL���ṩ���жϴ�����
+}
+
+void UART4_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&huart4);//HAL���ṩ���жϴ�����
+}
+
+
+void UART5_IRQHandler(void)
+{
+	printf("u5 irq");
+  HAL_UART_IRQHandler(&huart5);//HAL���ṩ���жϴ�����
+}
+
+
+
+/**
+  ******************************************************************************
+  * @section    Test
+  * @author  xlh
+  * @brief   
+  ******************************************************************************
+  */
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TEST @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+void USART_init(void)
+{
+	MX_USART1_UART_Init();
+	MX_USART2_UART_Init();
+}
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

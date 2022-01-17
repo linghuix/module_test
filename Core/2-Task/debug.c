@@ -102,7 +102,7 @@ int fputc(int ch, FILE * f)		// Keil
 {
 	while((USART1->SR&0X40)==0){};//循环发送,直到发送完毕
 	USART1->DR = (uint8_t) ch;
-	return ch;
+	return ch; 
 }
 
 int fgetc(FILE * F)		// Keil
@@ -113,13 +113,15 @@ int fgetc(FILE * F)		// Keil
 #endif
 
 #endif
+
+
 /**
  * author lhx
  * May 13, 2020
  *
  * @brief : Enable serial NVIC
- *			Set serial property
- * Window > Preferences > C/C++ > Editor > Templates.
+ *			    Set serial property
+ * 
  */
 
 void debug_init(void)
@@ -161,6 +163,39 @@ void debug_IRQ(void)
 	}*/
 }
 
+
+/**
+ * @brief This function handles USART1 global interrupt.
+ */
+TEST IDLE_UART1_IRQHandler (UART_HandleTypeDef *huart);
+void USART1_IRQHandler(void)
+{
+	debug_IRQ();
+	HAL_UART_IRQHandler(&huart1);
+	IDLE_UART1_IRQHandler(&huart1);
+}
+
+__weak void USART1_IDLE_CallBack_DEBUG_c(void)
+{
+	
+}
+
+TEST UART1_IDLECallback(UART_HandleTypeDef *huart)
+{
+		TEST_MSG("US1_IDLE\r\n");
+		
+		USART1_IDLE_CallBack_DEBUG_c();
+}
+
+TEST IDLE_UART1_IRQHandler (UART_HandleTypeDef *huart)
+{
+		if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))   // IDLE ?
+		{
+				__HAL_UART_CLEAR_IDLEFLAG(huart);
+				UART1_IDLECallback(huart); 
+		}
+}
+
 /**
   ******************************************************************************
   * @section    Test
@@ -169,6 +204,7 @@ void debug_IRQ(void)
   ******************************************************************************
   */
 //@@@@@@@@@@@@@T@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test
+
 #ifdef DEBUG_TEST
 
 	#include "main.h"
@@ -198,7 +234,7 @@ void debug_IRQ(void)
 	  * 	  USART1 interrupt must be use HAL_UART_IRQHandler(&huart1);
 	  *       In theory, we can use scanf() but we haven't achieve this.
 	  *		  
-      */
+    */
     
 	uint8_t test_buffRX[20];
 	uint8_t test_buffTX[100];

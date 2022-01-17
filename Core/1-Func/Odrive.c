@@ -666,8 +666,17 @@ void Odrive_Init(void){
 	
 }
 
-#ifdef ODRIVE_TEST
+/**
+  ******************************************************************************
+  * @section    Test
+  * @author  xlh
+  * @brief   
+  ******************************************************************************
+  */
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TEST @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
+
+#ifdef ODRIVE_TEST
 
 uint8_t ID_lefthip_odriver = 0x1;
 uint8_t ID_righthip_odriver = 0x2;
@@ -682,8 +691,7 @@ TEST current_control(void)
 	HAL_Delay(10);
 	ODrive_Set_Input_Current(ID_righthip_odriver, 0.8);		//left postive current value makes the leg move forward. 
 	
-															//right postive current value makes the leg move backward
+  //right postive current value makes the leg move backward
 }
-
 
 #endif

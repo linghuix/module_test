@@ -10,7 +10,7 @@ CAN_HandleTypeDef hcan1;
 
 
 /**
-  * @brief CAN Function Initialization. bps set and mode set
+  * @brief CAN Hardware Configuration. bps set and mode set
   * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
   * @retval None
   * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/3 = 1 MHz
@@ -36,7 +36,7 @@ void CANHandle_Init(uint32_t mode)
 	}
 }
 /**
-  * @brief CAN Function Initialization. bps set and mode set
+  * @brief CAN Hardware Configuration. bps set and mode set
   * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
   * @retval None
   * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/6 = 500 KHz
@@ -62,7 +62,7 @@ void CANHandle_Init_500K(uint32_t mode)
 	}
 }
 /**
-  * @brief CAN Function Initialization. bps set and mode set
+  * @brief CAN Hardware Configuration. bps set and mode set
   * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
   * @retval None
   * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/12 = 250 KHz
@@ -89,7 +89,7 @@ void CANHandle_Init_250K(uint32_t mode)
 }
 
 /**
-  * @brief CAN Function Initialization. bps set and mode set
+  * @brief CAN Hardware Configuration. bps set and mode set
   * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
   * @retval None
   * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(3+8+1)/12/2 = 125 KHz
@@ -117,7 +117,7 @@ void CANHandle_Init_125K(uint32_t mode)
 
 
 /**
-  * @brief CAN Function Initialization. bps set and mode set
+  * @brief CAN Hardware Configuration. bps set and mode set
   * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
   * @retval None
   * @note  bps: 36M/(SyncJumpWidth+TimeSeg1+TimeSeg2)/Prescaler		36M/(4+4+1)/800 = 125 KHz
@@ -145,7 +145,8 @@ void CANHandle_Init_5K(uint32_t mode)
 
 
 /**
-  * @brief activate and start the function of CAN interrupt
+  * @brief Activate and start the function of CAN interrupt
+  * 			 CAN_IT_RX_FIFO0_MSG_PENDING; CAN_IT_RX_FIFO1_MSG_PENDING
   */
 void CAN_ITEnable(void)
 {
@@ -157,10 +158,9 @@ void CAN_ITEnable(void)
 		;
 	}
 }
-
-
 /**
-  * @brief unactivate CAN interrupt
+  * @brief UNactivate CAN interrupt
+  * 			 CAN_IT_RX_FIFO0_MSG_PENDING; CAN_IT_RX_FIFO1_MSG_PENDING
   */
 void CAN_ITDISEnable(void)
 {
@@ -173,23 +173,16 @@ void CAN_ITDISEnable(void)
 	}
 }
 
-/************************************************
-函数名称 ： CAN_GPIO_Configuration
-功    能 ： CAN引脚配置
-参    数 ： 无
-返 回 值 ： 无
-作    者 ： strongerHuang
-*************************************************/
+
 
 /**
- * @author lhx
+ * @brief Initalization of CAN Hardware including /Hardware Configuration/, /filter/, and /activate interrupt/ (此时接受到信息能够立即进入中断)
  *
- * @brief : CAN的硬件功能初始化 including function, filter, and activate interrupt(此时接受到信息能够立即进入中断)
  * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
- * @call CANHandle_Init()
- *       CanFilter_Init()
- *       CAN_ITEnable()
- * Window > Preferences > C/C++ > Editor > Templates.
+ *
+ * @call  CANHandle_Init()
+ *        CanFilter_Init()
+ *        CAN_ITEnable()
  */
 void MX_CAN1_Init(uint32_t mode)
 {
@@ -199,14 +192,6 @@ void MX_CAN1_Init(uint32_t mode)
 	CAN_ITEnable();
 	MSG_ASTART("can1","conf");
 }
-
-void MX_CAN1_Test_Init(uint32_t mode)
-{
-	CANHandle_Init(mode);
-	CanFilter_Init(&hcan1, CAN_FILTER_FIFO0);
-	CAN_ITEnable();
-}
-
 
 
 /**
@@ -316,8 +301,8 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
 
 /**
   * @author lhx  May 13, 2020
-  * @brief  过滤器配置
-  * @param  canHandle: can structure Handler
+  * @brief  CAN Filter Configuration
+  * @param  CanHandle: can structure Handler
   *         FILTER_FIFO: CAN_FILTER_FIFO0 or CAN_FILTER_FIFO1
   * @retval None
   */ 
@@ -347,3 +332,19 @@ void CanFilter_Init(CAN_HandleTypeDef* hcan, uint32_t FILTER_FIFO)
 }
 
 
+/**
+  ******************************************************************************
+  * @section    Test
+  * @author  xlh
+  * @brief   
+  ******************************************************************************
+  */
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TEST @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+
+TEST MX_CAN1_Test_Init(uint32_t mode)
+{
+	CANHandle_Init(mode);
+	CanFilter_Init(&hcan1, CAN_FILTER_FIFO0);
+	CAN_ITEnable();
+}

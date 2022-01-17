@@ -64,7 +64,7 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
   /* Go to infinite loop when Hard Fault exception occurs */
-  //printf(" HardFault_Handler !!!\r\n");
+  printf(" HardFault_Handler !!!\r\n");
 
   while (1)
   {
@@ -125,7 +125,9 @@ void UsageFault_Handler(void)
 void SVC_Handler(void)
 {
 	printf(" SVC_Handler !!!\r\n");
-
+  while (1)
+  {
+  }
 }
 
 /**
@@ -135,6 +137,9 @@ void SVC_Handler(void)
   */
 void DebugMon_Handler(void)
 {
+	  while (1)
+  {
+  }
 }
 
 /**
@@ -142,11 +147,14 @@ void DebugMon_Handler(void)
   * @param  None
   * @retval : None
   */
-//void PendSV_Handler(void)
-//{
-//	printf(" PendSV_Handler !!!\r\n");
-//
-//}
+void PendSV_Handler(void)
+{
+	printf(" PendSV_Handler !!!\r\n");
+	  while (1)
+  {
+  }
+
+}
 
 /**
   * @brief  This function handles SysTick Handler.
@@ -164,33 +172,6 @@ void SysTick_Handler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32f10x_xx.s).                                            */
 /******************************************************************************/
-
-/**
-  * @brief  This function handles PPP interrupt request.
-  * @param  None
-  * @retval : None
-  */
-/*void PPP_IRQHandler(void)
-{
-}*/
-/************************************************
-�������� �� CAN_RX_IRQHandler
-��    �� �� CAN�����ж�
-��    �� �� ��
-�� �� ֵ �� ��
-��    �� �� strongerHuang
-*************************************************/
-void CAN1_RX0_IRQHandler(void)
-{
-	MSG(" CR - ");
-	HAL_CAN_IRQHandler(&hcan1);
-}
-
-void USB_HP_CAN1_TX_IRQHandler(void)
-{
-	MSG(" CT\r\n");
-	HAL_CAN_IRQHandler(&hcan1);
-}
 
 
 /************************************************
@@ -225,41 +206,10 @@ void TIM1_TRG_COM_IRQHandler(void)
 
 }
 
-/**
-* @brief This function handles USART1 global interrupt.
-*/
-void USART1_IRQHandler(void)
-{
-	debug_IRQ();
-//	HAL_UART_IRQHandler(&huart1);
-	
-//	#ifdef HARD_TEST
-//	IDLE_UART_IRQHandler(&huart1);
-//	#endif
-}
 
 #include "func_RS485.h"
 //#define F1912_TEST
 //#define rs485_TEST
-void USART2_IRQHandler(void)
-{
-
-	HAL_UART_IRQHandler(&huart2);			// for func_1912
-	
-	#ifdef F1912_TEST
-	IDLE_UART_IRQHandler(&huart2);			// for func_1912
-	#endif
-	#ifdef rs485_TEST
-	IDLE_UART_IRQHandler(&huart2);
-	#endif
-}
-
-
-void USART3_IRQHandler(void)
-{
-  HAL_UART_IRQHandler(&huart3);//HAL���ṩ���жϴ�����
-}
-
 
 /*
  * author lhx
@@ -271,28 +221,154 @@ void USART3_IRQHandler(void)
 
 void RTC_IRQHandler(void)
 {
+	printf("rtc irq");
 	HAL_RTCEx_RTCIRQHandler(&hrtc);
 }
 
 void RTC_Alarm_IRQHandler(void)
 {
+	printf("alarm irq");
 	HAL_RTC_AlarmIRQHandler(&hrtc);
 }
 
 
-void TIM4_IRQHandler(void)
-{
-	HAL_TIM_IRQHandler(&htim4);
-}
-/**
-  * @}
-  */ 
 
-void SPI1_IRQHandler(void)
-{
-	HAL_SPI_IRQHandler(&hspi1);
+// 中断服务函数
+
+
+void WWDG_IRQHandler(void){ 
+while(1);
+}
+void PVD_IRQHandler(void){ 
+while(1);
+}
+void TAMPER_IRQHandler(void){ 
+while(1);
 }
 
+void FLASH_IRQHandler(void){ 
+while(1);
+}
+void RCC_IRQHandler(void){ 
+while(1);
+}
+
+void DMA1_Channel1_IRQHandler(void){ 
+while(1);
+}
+void DMA1_Channel2_IRQHandler(void){ 
+while(1);
+}
+void DMA1_Channel3_IRQHandler(void){ 
+while(1);
+}
+void DMA1_Channel4_IRQHandler(void){ 
+while(1);
+}
+void DMA1_Channel5_IRQHandler(void){ 
+while(1);
+}
+void DMA1_Channel6_IRQHandler(void){ 
+while(1);
+}
+void DMA1_Channel7_IRQHandler(void){ 
+while(1);
+}
+void ADC1_2_IRQHandler(void){ 
+while(1);
+}
+
+
+void CAN1_RX1_IRQHandler(void){ 
+while(1);
+}
+void CAN1_SCE_IRQHandler(void){ 
+while(1);
+}
+void EXTI9_5_IRQHandler(void){ 
+while(1);
+}
+void TIM1_BRK_IRQHandler(void){ 
+while(1);
+}
+
+void TIM2_IRQHandler(void){ 
+while(1);
+}
+void TIM3_IRQHandler(void){ 
+while(1);
+}
+
+void I2C1_EV_IRQHandler(void){ 
+while(1);
+}
+void I2C1_ER_IRQHandler(void){ 
+while(1);
+}
+void I2C2_EV_IRQHandler(void){ 
+while(1);
+}
+void I2C2_ER_IRQHandler(void){ 
+while(1);
+}
+
+void SPI2_IRQHandler(void){ 
+while(1);
+}
+
+void EXTI15_10_IRQHandler(void){ 
+while(1);
+}
+
+void USBWakeUp_IRQHandler(void){ 
+while(1);
+}
+void TIM8_BRK_IRQHandler(void){ 
+while(1);
+}
+void TIM8_UP_IRQHandler(void){ 
+while(1);
+}
+void TIM8_TRG_COM_IRQHandler(void){ 
+while(1);
+}
+void TIM8_CC_IRQHandler(void){ 
+while(1);
+}
+void ADC3_IRQHandler(void){ 
+while(1);
+}
+void FSMC_IRQHandler(void){ 
+while(1);
+}
+void SDIO_IRQHandler(void){ 
+while(1);
+}
+void TIM5_IRQHandler(void){ 
+while(1);
+}
+void SPI3_IRQHandler(void){ 
+while(1);
+}
+
+void TIM6_IRQHandler(void){ 
+while(1);
+}
+void TIM7_IRQHandler(void){ 
+while(1);
+}
+void DMA2_Channel1_IRQHandler(void){ 
+while(1);
+}
+void DMA2_Channel2_IRQHandler(void){ 
+while(1);
+}
+void DMA2_Channel3_IRQHandler(void){ 
+while(1);
+}
+void DMA2_Channel4_5_IRQHandler(void){ 
+while(1);
+}
 
 
 /******************* (C) COPYRIGHT 2009 STMicroelectronics *****END OF FILE****/

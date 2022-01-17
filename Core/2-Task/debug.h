@@ -3,23 +3,31 @@
 
 #include "conf_usart.h"
 
+/**
+  * @brief  	debug configuration info
+	* @Author   lhx
+  */ 
+
+#define PORT huart1				// 选择输出的串口设备
+
+#define BUFF_Printf				// 使用缓冲区进行串口 printf 发送
+//#define NO_BUFF_Printf
+#define BufferSize 1000		// 使用缓冲区大小，数据流大时可以选择大一些
+
+// software environment set
+#define KEIL				  		//使用的环境是keil5
+
+
+/**
+  * @brief  	different Print "function"  提示信息
+	* @Author   lhx
+  */ 
 #define DEBUG_WAR_CONSOLE_ON
 #define DEBUG_ERR_CONSOLE_ON
-
-#define PORT huart1
-
-
-#define BUFF_Printf				//使用缓冲区进行串口 printf 发送
-#define BufferSize 1000		    //使用缓冲区大小，数据流大时可以选择大一些
-//#define NO_BUFF_Printf
-
-#define KEIL					//使用的环境是keil5
-
 
 /* Definition of error and warning macros */
 /* -------------------------------------- */
 #	define MSG(...) 	printf (__VA_ARGS__)
-
 
 /* Definition of MSG_ERR */
 /* --------------------- */
@@ -38,9 +46,8 @@
 #endif
 
 
-
 /**
-  * @brief  Before and after start. 初始化成功信息
+  *   Before and after start. 初始化成功信息
   */
 # define MSG_BSTART(device, action) 	MSG( device );MSG(" waiting for ");MSG(action);MSG(" ...\r\n");
 # define MSG_ASTART(device, action) 	MSG( device );MSG(" already ");MSG(action);MSG("\r\n");
@@ -59,16 +66,24 @@
 #define TEST_MSG(...)			MSG(__VA_ARGS__)
 #define MSG_deviceTest(...) 	MSG(__VA_ARGS__)
 
+#define Error_Handler() ERROR(3,"init error!"); //while(1);
+
+/**
+  * @brief  	test the function 
+	* @Author   lhx
+  */
+
+#define TEST void
+#define TEST_ON
 
 
-
-/*
- * author lhx
- * May 13, 2020
+/**
+ * @author lhx
+ * @Date  May 13, 2020
  *
  * @brief : in - point to null
  * 			out - point to char
- * Window > Preferences > C/C++ > Editor > Templates.
+ *
  */
 struct Buffer{
 	char data[BufferSize];
@@ -86,6 +101,5 @@ void debug_IRQ(void);
 
 void test_printf(void);
 void test_SpeedOfBuffer_printf(void);
-
 
 #endif
