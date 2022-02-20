@@ -39,7 +39,7 @@
 
 #include "func_w25qxx.h"
 #include "func_spi.h"
-
+#include "func_BLE_HC05.h"
 
 
 #include "win.h"

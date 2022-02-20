@@ -1,12 +1,13 @@
-/*
+
+/**
+  * @brief:
 	串口打印调试代码
-*/
+	固定使用串口1的发送功能，可以串口1的接收功能并存
+  */
+
 #include "debug.h"
 
-//#define DEBUG_TEST
-
 //G T R Vt
-
 
 extern UART_HandleTypeDef huart1;
 uint8_t ch_print;
@@ -14,12 +15,12 @@ uint8_t ch_scanf;
 struct Buffer debugBuffer = {"inital",0,0};
 
 
-/*
- * author lhx
- * May 13, 2020
+/**
+ * @author lhx
+ * @date May 13, 2020
  *
  * @brief : put data to buffer, buffer is FULL return 0.
- * Window > Preferences > C/C++ > Editor > Templates.
+ * @para c - 需要存入的数据, string to be inputting to buffer
  */
 uint8_t addDebugBuffer(char c)
 {
@@ -29,12 +30,15 @@ uint8_t addDebugBuffer(char c)
 	debugBuffer.in = (debugBuffer.in + 1)%BufferSize;
 	return 1;
 }
-/*
- * author lhx
- * May 13, 2020
+
+
+/**
+ * @author lhx
+ * @Date May 13, 2020
  *
  * @brief : 获取buff中的数据，buffer为空则返回0
- * Window > Preferences > C/C++ > Editor > Templates.
+ * @return c - 取出的字符 get string 
+ *
  */
 char getDebugBuffer(void)
 {
@@ -46,12 +50,13 @@ char getDebugBuffer(void)
 	return c;
 }
 
-/*
- * author lhx
- * May 14, 2020
+
+/**
+ * @author lhx
+ * @date May 14, 2020
  *
  * @brief : STM32CubeIDE printf 重定位到 PORT
- * Window > Preferences > C/C++ > Editor > Templates.
+ *
  */
 #ifdef Cube
 #ifdef BUFF_Printf
@@ -71,12 +76,12 @@ int _write(int file, char *ptr, int len)
 
 
 /**
- * author lhx
- * May 29, 2020
+ * @author lhx
+ * @date May 29, 2020
  *
  * @brief : 在 keil 中重定向 printf 与 scanf
- * 	注意使用前需要开启microLib
- * Window > Preferences > C/C++ > Editor > Templates.
+ * @Note 注意使用前需要开启 microLib
+ *
  */
 #ifdef KEIL
 #ifdef BUFF_Printf
@@ -116,14 +121,13 @@ int fgetc(FILE * F)		// Keil
 
 
 /**
- * author lhx
+ * @author lhx
  * May 13, 2020
  *
- * @brief : Enable serial NVIC
+ * @brief : USART initalization. Enable serial IT
  *			    Set serial property
  * 
  */
-
 void debug_init(void)
 {
 	MSG_BSTART("DEBUG","init");
@@ -132,26 +136,27 @@ void debug_init(void)
 }
 
 /**
- * author lhx
+ * @author lhx
  * May 13, 2020
  *
- * @brief : interrupt service function
+ * @brief : usart1 interrupt service function
  */
-
 void debug_IRQ(void)
 {
 	uint32_t isrflags   = READ_REG(huart1.Instance->SR);
 	uint32_t cr1its     = READ_REG(huart1.Instance->CR1);
 	char c;
+	
 	/* UART in mode Transmitter -----------TXE ------------------------------------*/
-	if (((isrflags & USART_SR_TXE) != RESET) && ((cr1its & USART_CR1_TXEIE) != RESET)){
+	if (((isrflags & USART_SR_TXE) != RESET) && ((cr1its & USART_CR1_TXEIE) != RESET))
+	{
 	  c = getDebugBuffer();
-	  if(c != 0){
+		
+	  if(c != 0){				/* If buffer is not empty, then get a string and send it to TX_USART_buffer */
 		  huart1.Instance->DR = (uint16_t)( c & (uint16_t)0x01FF);
 	  }
-	  else{
-		  /* Disable the UART Transmit Complete Interrupt */
-		  __HAL_UART_DISABLE_IT(&huart1, UART_IT_TXE);
+	  else{							/* If buffer is empty */
+		  __HAL_UART_DISABLE_IT(&huart1, UART_IT_TXE);		  /* Disable the UART Transmit Complete Interrupt */
 		  //__HAL_UART_DISABLE_IT(huart, UART_IT_TC);
 	  }
 	}
@@ -167,34 +172,13 @@ void debug_IRQ(void)
 /**
  * @brief This function handles USART1 global interrupt.
  */
-TEST IDLE_UART1_IRQHandler (UART_HandleTypeDef *huart);
 void USART1_IRQHandler(void)
 {
-	debug_IRQ();
+	debug_IRQ();						//debug.c
 	HAL_UART_IRQHandler(&huart1);
 	IDLE_UART1_IRQHandler(&huart1);
 }
 
-__weak void USART1_IDLE_CallBack_DEBUG_c(void)
-{
-	
-}
-
-TEST UART1_IDLECallback(UART_HandleTypeDef *huart)
-{
-		TEST_MSG("US1_IDLE\r\n");
-		
-		USART1_IDLE_CallBack_DEBUG_c();
-}
-
-TEST IDLE_UART1_IRQHandler (UART_HandleTypeDef *huart)
-{
-		if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))   // IDLE ?
-		{
-				__HAL_UART_CLEAR_IDLEFLAG(huart);
-				UART1_IDLECallback(huart); 
-		}
-}
 
 /**
   ******************************************************************************
@@ -205,6 +189,7 @@ TEST IDLE_UART1_IRQHandler (UART_HandleTypeDef *huart)
   */
 //@@@@@@@@@@@@@T@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ test
 
+//#define DEBUG_TEST
 #ifdef DEBUG_TEST
 
 	#include "main.h"

@@ -16,7 +16,7 @@
 
 //#define USART3_TEST
 //#define USART4_TEST
-#define USART5_TEST
+//#define USART5_TEST
 
 /* Global Variable -------------------------------*/
 
@@ -63,15 +63,15 @@ TEST test_USART1_Rcv(void)
 	  * @brief  串口中断回调函数
 	  * @retval None
 	  */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+//{
 
-	if(huart->Instance == USART1){
-		hardtest_CommandReceive[hardtest_length] = hardtest_receivebyte;
-		hardtest_length++;
-		HAL_UART_Receive_IT(&huart1, &hardtest_receivebyte, 1);
-	}
-}
+//	if(huart->Instance == USART1){
+//		hardtest_CommandReceive[hardtest_length] = hardtest_receivebyte;
+//		hardtest_length++;
+//		HAL_UART_Receive_IT(&huart1, &hardtest_receivebyte, 1);
+//	}
+//}
 
 	/**
 	  * @brief  串口空闲中断回调函数
@@ -272,6 +272,6 @@ TEST HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 void hard_test(void)
 {
 //	test_UART4_communication();
-	test_UART5_communication();
+//	test_UART5_communication();
 }
 

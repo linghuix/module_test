@@ -68,13 +68,14 @@
 
 #define Error_Handler() ERROR(3,"init error!"); //while(1);
 
+
 /**
   * @brief  	test the function 
 	* @Author   lhx
   */
 
 #define TEST void
-#define TEST_ON
+#define TEST_ON			// ∆Ù∂Ø≤‚ ‘
 
 
 /**
@@ -92,14 +93,16 @@ struct Buffer{
 };
 
 
-
+/* Interface */
 char getDebugBuffer(void);
 uint8_t addDebugBuffer(char c);
 void debug_init(void);
-void debug_IRQ(void);
 
 
 void test_printf(void);
 void test_SpeedOfBuffer_printf(void);
+
+/* usart1 IDLE Interrupt service function*/
+
 
 #endif

@@ -67,8 +67,6 @@ void Force_1912_Start(void)
 	ClearForce_Device(myID);
 }
 
-
-
 /**
   * @brief  Check the sum of the data start from "start" to "end" index of array "data". 
   *			Pay attention to that "end" index is included.
@@ -153,8 +151,6 @@ float getCurrentForce(void)
 
 
 //#define F1912_TEST
-
-
 #ifdef F1912_TEST
 
 

@@ -1,7 +1,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "conf_usart.h"
-//#include "conf_global.h""
 
 GPIO_InitTypeDef GPIO_InitStruct;
 
@@ -14,7 +13,13 @@ UART_HandleTypeDef huart5;
 DMA_HandleTypeDef hdma_usart1_rx;
 
 
-/* USART1 init function */
+/**
+ * @author lhx
+ * @Date May 13, 2020
+ *
+ * @brief :USART init function
+ * 			配置相关的波特率等参数
+ */
 void MX_USART1_UART_Init(void)
 {
   huart1.Instance = USART1;
@@ -30,8 +35,6 @@ void MX_USART1_UART_Init(void)
     Error_Handler()
   }
 }
-
-
 void MX_USART2_UART_Init(void)
 {
 
@@ -49,11 +52,8 @@ void MX_USART2_UART_Init(void)
   }
 
 }
-
-
 void MX_USART3_UART_Init(void)
 {
-
   huart3.Instance = USART3;
   huart3.Init.BaudRate = 115200;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
@@ -66,11 +66,7 @@ void MX_USART3_UART_Init(void)
   {
     Error_Handler()
   }
-
 }
-
-
-/* UART4 init function */
 void MX_UART4_UART_Init(void)
 {
   huart4.Instance = UART4;
@@ -86,8 +82,6 @@ void MX_UART4_UART_Init(void)
     Error_Handler()
   }
 }
-
-/* UART5 init function */
 void MX_UART5_UART_Init(void)
 {
   huart5.Instance = UART5;
@@ -104,16 +98,15 @@ void MX_UART5_UART_Init(void)
   }
 }
 
+
 /**
- * author lhx
- * May 13, 2020
+ * @author lhx
+ * @Date May 13, 2020
  *
  * @brief : 调用自HAL_UART_MspInit
- * 			引脚初始化
- * 			时钟开启
- * 
+ * 			串口相关引脚初始化
+ * 			串口和引脚时钟开启
  */
-
 void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
 {
     if(uartHandle->Instance==USART1)
@@ -125,12 +118,6 @@ void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
 		__HAL_RCC_USART1_CLK_ENABLE();
 		__HAL_RCC_GPIOA_CLK_ENABLE();
 		
-		//    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
-		//    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-		//    GPIO_InitStruct.Pull = GPIO_NOPULL;
-		//    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-		//    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
 		GPIO_InitStruct.Pin = GPIO_PIN_10;
 		GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 		GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -153,15 +140,15 @@ void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
       PA3     ------> USART2_RX
       PA2     ------> USART2_TX
       */
-    GPIO_InitStruct.Pin = GPIO_PIN_2;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+			GPIO_InitStruct.Pin = GPIO_PIN_2;
+			GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_3;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+			GPIO_InitStruct.Pin = GPIO_PIN_3;
+			GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+			GPIO_InitStruct.Pull = GPIO_NOPULL;
+			HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
     }
     else if(uartHandle->Instance==USART3)
     {
@@ -173,22 +160,16 @@ void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
       PB11     ------> USART3_RX
       PB10     ------> USART3_TX
       */
-      
-	/*GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11;  这种配置，可以发送，但是不能接受数据
-      GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-      GPIO_InitStruct.Pull = GPIO_NOPULL;
-      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-      HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);*/
 
-    GPIO_InitStruct.Pin = GPIO_PIN_10;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+			GPIO_InitStruct.Pin = GPIO_PIN_10;
+			GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+			GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+			HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_11;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+			GPIO_InitStruct.Pin = GPIO_PIN_11;
+			GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+			GPIO_InitStruct.Pull = GPIO_NOPULL;
+			HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
     }
 
     else if(uartHandle->Instance==UART4)
@@ -239,11 +220,11 @@ void USART_Hardware_Init(UART_HandleTypeDef* uartHandle)
     }
 }
 
-/*
- * author lhx
- * May 13, 2020
+/**
+ * @author lhx
+ * @Date May 13, 2020
  *
- * @brief : 串口中断功能设置和开启
+ * @brief : 串口中断功能使能,优先级设置，注意中断在此处未开启
  * 
  */
 void USART_NVIC_Init(UART_HandleTypeDef* uartHandle)
@@ -279,24 +260,28 @@ void USART_NVIC_Init(UART_HandleTypeDef* uartHandle)
     }
 }
 
-/*
- * author lhx
- * May 13, 2020
+/**
+ * @author lhx
+ * @Date May 13, 2020
  *
  * @brief : 调用自 HAL_UART_Init，用于硬件初始化
  * 
  */
-
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
 {
 	USART_Hardware_Init(uartHandle);
 	USART_NVIC_Init(uartHandle);
 }
 
-
+/**
+ * @author lhx
+ * @Date May 13, 2020
+ *
+ * @brief : 串口硬件去初始化
+ * 
+ */
 void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 {
-
   if(uartHandle->Instance==USART1)
   {
     /* Peripheral clock disable */
@@ -313,14 +298,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
     /* Peripheral interrupt Deinit*/
     HAL_NVIC_DisableIRQ(USART1_IRQn);
-
   }
   else if(uartHandle->Instance==USART2)
   {
-  /* USER CODE BEGIN USART2_MspDeInit 0 */
-
-  /* USER CODE END USART2_MspDeInit 0 */
-    /* Peripheral clock disable */
     __HAL_RCC_USART2_CLK_DISABLE();
   
     /**USART2 GPIO Configuration    
@@ -329,16 +309,10 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOD, GPIO_PIN_6|GPIO_PIN_5);
 
-    /* Peripheral interrupt Deinit*/
     HAL_NVIC_DisableIRQ(USART2_IRQn);
-
-  /* USER CODE BEGIN USART2_MspDeInit 1 */
-
-  /* USER CODE END USART2_MspDeInit 1 */
   }
   else if(uartHandle->Instance==USART3)
   {
-    /* Peripheral clock disable */
     __HAL_RCC_USART3_CLK_DISABLE();
   
     /**USART3 GPIO Configuration    
@@ -347,13 +321,10 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOD, GPIO_PIN_9|GPIO_PIN_8);
 
-    /* Peripheral interrupt Deinit*/
     HAL_NVIC_DisableIRQ(USART3_IRQn);
-
   }
   else if(uartHandle->Instance==UART4)
   {
-	/* Peripheral clock disable */
     __HAL_RCC_UART4_CLK_DISABLE();
   
     /**UART4 GPIO Configuration    
@@ -362,12 +333,10 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_11);
 
-    /* UART4 interrupt DeInit */
     HAL_NVIC_DisableIRQ(UART4_IRQn);
   }
   else if(uartHandle->Instance==UART4)
   {
-	/* Peripheral clock disable */
     __HAL_RCC_UART4_CLK_DISABLE();
   
     /**UART4 GPIO Configuration    
@@ -376,58 +345,204 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_11);
 
-    /* UART4 interrupt DeInit */
     HAL_NVIC_DisableIRQ(UART4_IRQn);
   }
 } 
 
 
+/**
+ * @author lhx
+ * @Date May 13, 2020
+ *
+ * @brief : 串口发送回调函数
+ * 
+ */
 TEST HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-	if(huart->Instance == USART1){
-		
-	}
 	if(huart->Instance == USART2){
-		
+		TEST_MSG("Tx2C\r\n");	// usart2 tx send completely
 	}
 	if(huart->Instance == USART3){
-		
+		TEST_MSG("Tx3C\r\n");
+	}
+	if(huart->Instance == UART4){
+		TEST_MSG("Tx4C\r\n");
+	}
+	if(huart->Instance == UART5){
+		TEST_MSG("Tx5C\r\n");
 	}
 }
 
+/**
+ * @author lhx
+ * @Date 01/17, 2022
+ *
+ * @brief : USART1 IDLE interrupt service function CallBack
+            串口一空闲中断回调函数
+		在 IDLE_UARTX_IRQHandler 中被调用
+		在其他func或者task函数中可替换此函数
+ */
+__weak void USART1_IDLE_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US1_IDLE\r\n");
+}
+__weak void USART2_IDLE_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US2_IDLE\r\n");
+}
+__weak void USART3_IDLE_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US3_IDLE\r\n");
+}
+__weak void USART4_IDLE_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US4_IDLE\r\n");
+}
+__weak void USART5_IDLE_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US5_IDLE\r\n");
+}
 
+/**
+ * @author lhx
+ * @Date 01/17, 2022
+ *
+ * @brief : USART1 RX interrupt service function CallBack
+            串口一空闲中断回调函数
+		在其他func或者task函数中可替换此函数
+ */
+__weak void USART1_RX_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US1_RX\r\n");
+}
+__weak void USART2_RX_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US2_RX\r\n");
+}
+__weak void USART3_RX_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US3_RX\r\n");
+}
+__weak void USART4_RX_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US4_RX\r\n");
+}
+__weak void USART5_RX_CallBack_Conf_usart_c(void)
+{
+	TEST_MSG("US5_RX\r\n");
+}
+
+
+/**
+  * @brief  callback function for USARTX
+  * @param  huart poiner to UART structure
+  * @retval HAL status
+  */
+TEST HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	
+	if(huart->Instance == USART1){
+		USART1_RX_CallBack_Conf_usart_c();
+//		TEST_MSG("Usart2 rcv %d\r\n", length);
+//		// TEST_MSG("0x%x\t", receivebyte);
+//		CommandReceive[length] = receivebyte;
+//		length++;
+	}
+	if(huart->Instance == USART2){
+		USART2_RX_CallBack_Conf_usart_c();
+	}
+	if(huart->Instance == USART3){
+		USART3_RX_CallBack_Conf_usart_c();
+	}
+	if(huart->Instance == UART4){
+		USART4_RX_CallBack_Conf_usart_c();
+	}
+	if(huart->Instance == UART5){
+		USART5_RX_CallBack_Conf_usart_c();
+	}
+}
+/**
+ * @author lhx
+ * @Date 01/17, 2022
+ *
+ * @brief : USARTX IDLE interrupt Handler
+            串口空闲中断处理函数
+		is called in UARTX_IRQHandler
+ */
+TEST IDLE_UART1_IRQHandler (UART_HandleTypeDef *huart)
+{
+		if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))   // IDLE ?
+		{
+				__HAL_UART_CLEAR_IDLEFLAG(huart);
+				USART1_IDLE_CallBack_Conf_usart_c();
+		}
+}
+TEST IDLE_UART2_IRQHandler (UART_HandleTypeDef *huart)
+{
+		if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))   // IDLE ?
+		{
+				__HAL_UART_CLEAR_IDLEFLAG(huart);
+				USART2_IDLE_CallBack_Conf_usart_c();
+		}
+}
+TEST IDLE_UART3_IRQHandler (UART_HandleTypeDef *huart)
+{
+		if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))   // IDLE ?
+		{
+				__HAL_UART_CLEAR_IDLEFLAG(huart);
+				USART3_IDLE_CallBack_Conf_usart_c();
+		}
+}
+TEST IDLE_UART4_IRQHandler (UART_HandleTypeDef *huart)
+{
+		if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))   // IDLE ?
+		{
+				__HAL_UART_CLEAR_IDLEFLAG(huart);
+				USART4_IDLE_CallBack_Conf_usart_c();
+		}
+}
+TEST IDLE_UART5_IRQHandler (UART_HandleTypeDef *huart)
+{
+		if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))   // IDLE ?
+		{
+				__HAL_UART_CLEAR_IDLEFLAG(huart);
+				USART5_IDLE_CallBack_Conf_usart_c();
+		}
+}
+
+
+
+/**
+ * @author lhx
+ * @Date 01/17, 2022
+ *
+ * @brief : USART2-5 global interrupt Handler
+            串口全局中断处理函数
+ */
 void USART2_IRQHandler(void)
 {
-
-	HAL_UART_IRQHandler(&huart2);			// for func_1912
-	
-	#ifdef F1912_TEST
-	IDLE_UART_IRQHandler(&huart2);			// for func_1912
-	#endif
-	#ifdef rs485_TEST
-	IDLE_UART_IRQHandler(&huart2);
-	#endif
+	printf("u2 irq\r\n");
+	HAL_UART_IRQHandler(&huart2);	
+	IDLE_UART2_IRQHandler(&huart2);
 }
-
-
 void USART3_IRQHandler(void)
 {
-  HAL_UART_IRQHandler(&huart3);//HAL���ṩ���жϴ�����
+	printf("u3 irq\r\n");
+	HAL_UART_IRQHandler(&huart3);
+	IDLE_UART3_IRQHandler(&huart3);
 }
-
 void UART4_IRQHandler(void)
 {
-  HAL_UART_IRQHandler(&huart4);//HAL���ṩ���жϴ�����
+	printf("u4 irq\r\n");
+	HAL_UART_IRQHandler(&huart4);
+	IDLE_UART4_IRQHandler(&huart4);
 }
-
-
 void UART5_IRQHandler(void)
 {
-	printf("u5 irq");
-  HAL_UART_IRQHandler(&huart5);//HAL���ṩ���жϴ�����
+	printf("u5 irq\r\n");
+	HAL_UART_IRQHandler(&huart5);
+	IDLE_UART5_IRQHandler(&huart5);
 }
-
-
 
 /**
   ******************************************************************************

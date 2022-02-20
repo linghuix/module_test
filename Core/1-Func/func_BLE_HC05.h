@@ -10,6 +10,7 @@
 
 #include "conf_usart.h"
 
+
 #define HC05_huart huart1
 
 void HC05_Init(void);
@@ -17,8 +18,17 @@ void HC05_config(void);
 
 extern uint32_t inc;
 
+
 void HC05_send(uint8_t data[], uint8_t size);
 TEST test_HC05_communication(void);
+TEST test_USART1_communication(void);
+void HC05_RcvCmd(void);
 
+void commandPrase(void);
+
+
+
+TEST test_CommandReceiver(TEST);
 
 #endif /* 1_FUNC_FUNC_BLE_HC05_H_ */
+

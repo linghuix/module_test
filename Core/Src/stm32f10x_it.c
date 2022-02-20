@@ -174,16 +174,8 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 
-/************************************************
-�������� �� CANOPEN_TIM_IRQ_Handler
-��    �� �� CANOpen��ʱ�ж�
-��    �� �� ��
-�� �� ֵ �� ��
-��    �� �� strongerHuang
-*************************************************/
 void CANOPEN_TIM_IRQ_Handler(void)
 {
-
 	MSG(" CANOPEN_TIM_IRQ_Handler !!!\r\n");
 	HAL_TIM_IRQHandler(&htim2);
 
@@ -206,34 +198,6 @@ void TIM1_TRG_COM_IRQHandler(void)
 
 }
 
-
-#include "func_RS485.h"
-//#define F1912_TEST
-//#define rs485_TEST
-
-/*
- * author lhx
- * Apr 11, 2020
- *
- * @brief : 日历时钟设置
- * Window > Preferences > C/C++ > Editor > Templates.
- */
-
-void RTC_IRQHandler(void)
-{
-	printf("rtc irq");
-	HAL_RTCEx_RTCIRQHandler(&hrtc);
-}
-
-void RTC_Alarm_IRQHandler(void)
-{
-	printf("alarm irq");
-	HAL_RTC_AlarmIRQHandler(&hrtc);
-}
-
-
-
-// 中断服务函数
 
 
 void WWDG_IRQHandler(void){ 

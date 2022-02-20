@@ -1,6 +1,6 @@
 /*
  * calendar.c
- *
+ * 涉及硬件 RTC，预备寄存器
  *  Created on: Apr 11, 2020
  *      Author: test
  */
@@ -22,8 +22,8 @@ void systemTimer_init(void)
 	getDate();
 }
 
-/*
- * author lhx
+/**
+ * @author lhx
  * Apr 11, 2020
  *
  * @brief : 获取RTC日期到systime结构体中。 每次Date发生变化都需要调用，以同步
@@ -71,8 +71,8 @@ void setSysTime(SysTime sys,uint8_t isyear)
 
 }
 
-/*
- * author lhx
+/**
+ * @author lhx
  * Apr 11, 2020
  *
  * @brief : 获取时间信息，并每天的0:0:0 更新日期，保存日期到flash中
@@ -95,12 +95,12 @@ void getSysTime(void)
 	}
 }
 
-/*
- * author lhx
+/**
+ * @author lhx
  * Apr 11, 2020
  *
  * @brief : 设置闹铃，并库自动启动中断，因此这里初始化RTC时不需要提前使能中断，只需要开启NVIC中断即可
- * Window > Preferences > C/C++ > Editor > Templates.
+ * @Note 只能设置小时和分钟的闹钟.
  */
 
 void setAlarm(SysTime sys)
@@ -117,20 +117,44 @@ void print_sysTime(void)
 	printf("%s\r\n",weekday[systime.Weekday]);
 }
 
-TEST testalarm(void)
+
+
+
+//#define SYSTEMTIMER_TEST
+#ifdef SYSTEMTIMER_TEST
+
+/**
+ * @author lhx
+ * @Date 01/18, 2022
+ *
+ * @brief : 万年历计时器的计时能力测试
+ */
+TEST test_systemTimer(TEST)
 {
-	SysTime sys = {0};
+	systemTimer_init();
+}
+
+/**
+ * @author lhx
+ * @Date 01/18, 2022
+ *
+ * @brief : 万年历的闹钟功能测试
+ */
+TEST test_alarm(TEST)
+{
+	systemTimer_init();
+	
+	SysTime sys = {0};		// calendar initalization
 	sys.Hour = 1;
 	sys.Minute = 30;
 	sys.Second = 20;
-	setSysTime(sys, 0);
+	setSysTime(sys, 0);		// set calendar time
 
-	sys.Minute = 31;
+	sys.Minute = 31;		// set alarm timer
 	setAlarm(sys);
 }
 
-
-
+/* RTC 中断服务函数，读取当前时间打印出来 */
 void HAL_RTCEx_RTCEventCallback(RTC_HandleTypeDef *hrtc)
 {
 	getSysTime();
@@ -142,13 +166,29 @@ void HAL_RTCEx_RTCEventErrorCallback(RTC_HandleTypeDef *hrtc)
 	MSG("error\r\n");
 }
 
+/* 闹钟中断服务函数 */
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
 {
-	MSG("alarming！！！！！\r\n");
+	MSG("alarming!!!!!\r\n");
 }
 
-TEST systemTimer_test(TEST)
+/**
+ * @author lhx
+ * @date Apr 11, 2020
+ *
+ * @brief : 日历时钟设置
+ * 
+ */
+
+void RTC_IRQHandler(void)
 {
-	
-	systemTimer_init();
+	printf("RTC it:");
+	HAL_RTCEx_RTCIRQHandler(&hrtc);
 }
+
+void RTC_Alarm_IRQHandler(void)
+{
+	printf("ALARM it:");
+	HAL_RTC_AlarmIRQHandler(&hrtc);
+}
+#endif

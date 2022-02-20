@@ -44,7 +44,7 @@ void RTC_conf(void)
 		DateToUpdate.WeekDay = RTC_WEEKDAY_SATURDAY;
 		DateToUpdate.Month = RTC_MONTH_APRIL;
 		DateToUpdate.Date = 11;
-		DateToUpdate.Year = 20;
+		DateToUpdate.Year = 22;
 		if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BIN) != HAL_OK){
 			Error_Handler()
 		}

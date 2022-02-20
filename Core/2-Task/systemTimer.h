@@ -28,7 +28,8 @@ extern SysTime alarmtime;
 void systemTimer_init(void);
 void showTime(void);
 
-TEST testalarm(void);
 
-TEST systemTimer_test(TEST);
+TEST test_alarm(TEST);
+TEST test_systemTimer(TEST);
+
 #endif /* TASK_SYSTEMTIMER_H_ */

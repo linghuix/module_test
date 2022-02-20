@@ -10,11 +10,12 @@ int main(void)
 	
 #ifdef TEST_ON
 	/*---hardware test---*/
-//	hard_test();
-//	test_USART1_communication();
-//	test_USART1_Rcv();
 	
-
+//	test_systemTimer();
+//	test_alarm();
+	
+//	test_CommandReceiver();
+	
 //	test_GetForce();
 //	test_GetCurrentForce();
 //	printf("beginning\r\n");
@@ -62,7 +63,7 @@ int main(void)
 	
 //	test_beep();
 
-	MX_GPIO_EXIT_Init();
+//	MX_GPIO_EXIT_Init();
 
 //test_USART3_communication();
 
