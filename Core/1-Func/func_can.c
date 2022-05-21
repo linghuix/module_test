@@ -123,7 +123,7 @@ void USB_HP_CAN1_TX_IRQHandler(void)
   */
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TEST @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
-//#define CAN_TEST
+#define CAN_TEST
 
 #ifdef CAN_TEST
 
