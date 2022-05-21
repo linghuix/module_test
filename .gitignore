@@ -1,0 +1,10 @@
+*
+!/**/
+!*.c
+!*.h
+!*.txt
+!*.uvprojx
+!*.md
+!*.clang-format
+!*.s
+!*.gitignore
