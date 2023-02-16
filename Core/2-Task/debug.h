@@ -56,15 +56,17 @@
 /* ------------自定义提示信息-------------------------- */
 
 #define Task_MSG(...) 			MSG(__VA_ARGS__)
-#define MMSG(...) 				MSG(__VA_ARGS__)
+#define MMSG(...) 					MSG(__VA_ARGS__)
 #define CAN_SEND_MSG(...)		//MSG(__VA_ARGS__)
 #define CAN_RCV_MSG(...)		//MSG(__VA_ARGS__)
-#define TPDO_MSG(...)			//MSG(__VA_ARGS__)
-#define SYNC_MSG(...)			//MSG(__VA_ARGS__)
-#define ROW_MSG(...)			MSG(__VA_ARGS__)	
-#define ERROR(s,...)			MSG("#ERROR %d# ",s);MSG(__VA_ARGS__);MSG("\t--%s,%d\r\n",__FILE__, __LINE__)
-#define TEST_MSG(...)			MSG(__VA_ARGS__)
+#define TPDO_MSG(...)				//MSG(__VA_ARGS__)
+#define SYNC_MSG(...)				//MSG(__VA_ARGS__)
+#define ROW_MSG(...)				MSG(__VA_ARGS__)	
+#define ERROR(s,...)				MSG("#ERROR %d# ",s);MSG(__VA_ARGS__);MSG("\t--%s,%d\r\n",__FILE__, __LINE__)
+#define TEST_MSG(...)				MSG(__VA_ARGS__)
 #define MSG_deviceTest(...) 	MSG(__VA_ARGS__)
+
+#define TIME(...) 					MSG(__VA_ARGS__);MSG(" t-%dms\r\n",HAL_GetTick());
 
 #define Error_Handler() ERROR(3,"init error!"); //while(1);
 
@@ -90,6 +92,7 @@ struct Buffer{
 	char data[BufferSize];
 	uint16_t in;
 	uint16_t out;
+	uint8_t overflow;
 };
 
 

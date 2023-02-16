@@ -11,8 +11,8 @@
 
 
 #include "stdio.h"				//C代码头文件
-#include "math.h"				//数学符号库
-#include "stm32f1xx.h"			//包含 //#include "stm32f1xx_hal.h"		//HAL库函数名
+#include "math.h"				  //数学符号库
+#include "stm32f1xx.h"		//包含 //#include "stm32f1xx_hal.h"		//HAL库函数名
 
 #include "debug.h"				//串口调试助手函数名
 

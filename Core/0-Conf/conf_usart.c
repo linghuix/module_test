@@ -363,7 +363,7 @@ TEST HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 		TEST_MSG("Tx2C\r\n");	// usart2 tx send completely
 	}
 	if(huart->Instance == USART3){
-		TEST_MSG("Tx3C\r\n");
+	//	TEST_MSG("Tx3C\r\n");
 	}
 	if(huart->Instance == UART4){
 		TEST_MSG("Tx4C\r\n");
@@ -527,7 +527,7 @@ void USART2_IRQHandler(void)
 }
 void USART3_IRQHandler(void)
 {
-	printf("u3 irq\r\n");
+	//printf("u3 irq\r\n");
 	HAL_UART_IRQHandler(&huart3);
 	IDLE_UART3_IRQHandler(&huart3);
 }

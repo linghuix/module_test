@@ -53,7 +53,7 @@
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
-          <DebugInformation>0</DebugInformation>
+          <DebugInformation>1</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Drivers\STM32F1xx_HAL_Driver\Inc;..\Drivers\CMSIS\Include;..\Drivers\STM32F1xx_HAL_Driver\Inc\Legacy;..\Drivers\CMSIS\Device\ST\STM32F1xx\Include;..\Core\Inc;..\Core\0-Conf;..\Core\1-Func;..\Core\2-Task;..\Core\Src;..\Core\Data</IncludePath>
+              <IncludePath>..\Drivers\STM32F1xx_HAL_Driver\Inc;..\Drivers\CMSIS\Include;..\Drivers\STM32F1xx_HAL_Driver\Inc\Legacy;..\Drivers\CMSIS\Device\ST\STM32F1xx\Include;..\Core\Inc;..\Core\0-Conf;..\Core\1-Func;..\Core\2-Task;..\Core\Src;..\Core\Data;..\Drivers\USB_Device_Library\Core\Inc;..\Drivers\USB_Device_Library\Class\CDC\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -561,6 +561,21 @@
               <FileType>1</FileType>
               <FilePath>..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dac_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f1xx_hal_pcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_pcd_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pcd_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_ll_usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_usb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -641,6 +656,11 @@
               <FileType>1</FileType>
               <FilePath>..\Core\0-Conf\conf_iic.c</FilePath>
             </File>
+            <File>
+              <FileName>usbd_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\0-Conf\usbd_conf.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -660,6 +680,21 @@
               <FileName>debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\2-Task\debug.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\1-Func\usb_device.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_desc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\1-Func\usbd_desc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_cdc_if.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\1-Func\usbd_cdc_if.c</FilePath>
             </File>
             <File>
               <FileName>systemTimer.c</FileName>
@@ -811,6 +846,16 @@
               <FileType>1</FileType>
               <FilePath>..\Core\1-Func\DS_300c.c</FilePath>
             </File>
+            <File>
+              <FileName>Tmotor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\1-Func\Tmotor.c</FilePath>
+            </File>
+            <File>
+              <FileName>func_RMDmotor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\1-Func\func_RMDmotor.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -830,6 +875,36 @@
               <FileName>win.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Data\win.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USBLib</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\USB_Device_Library\Core\Src\usbd_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_ctlreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\USB_Device_Library\Core\Src\usbd_ctlreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\USB_Device_Library\Core\Src\usbd_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_cdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\USB_Device_Library\Class\CDC\Src\usbd_cdc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_def.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Drivers\USB_Device_Library\Core\Inc\usbd_def.h</FilePath>
             </File>
           </Files>
         </Group>

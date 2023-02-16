@@ -137,6 +137,7 @@ void SVC_Handler(void)
   */
 void DebugMon_Handler(void)
 {
+	printf(" DebugMon_Handler !!!\r\n");
 	  while (1)
   {
   }
@@ -244,9 +245,11 @@ while(1);
 
 
 void CAN1_RX1_IRQHandler(void){ 
-while(1);
+	printf("CAN rx int\r\n");
+	while(1);
 }
 void CAN1_SCE_IRQHandler(void){ 
+	printf("CAN sce int\r\n");
 while(1);
 }
 void EXTI9_5_IRQHandler(void){ 
@@ -284,9 +287,7 @@ void EXTI15_10_IRQHandler(void){
 while(1);
 }
 
-void USBWakeUp_IRQHandler(void){ 
-while(1);
-}
+
 void TIM8_BRK_IRQHandler(void){ 
 while(1);
 }

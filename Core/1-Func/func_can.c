@@ -62,6 +62,45 @@ void CAN_Start(CAN_HandleTypeDef *phcan)
 
 
 /**
+  * @brief  	Print the CAN frame your just received through interruption.
+  * 
+  * @param    None
+  * @Note			Must enable RX IT. 
+              And received message in FIFO1, FIFO2 all will active this function 
+  * @retval	 	None
+	* @Author   lhx
+  */ 
+
+void CAN1_RX0_IRQHandler(void)
+{
+	MSG(" CR - ");
+	HAL_CAN_IRQHandler(&hcan1);
+}
+
+
+void USB_HP_CAN1_TX_IRQHandler(void)
+{
+	MSG(" CT\r\n");
+	HAL_CAN_IRQHandler(&hcan1);
+}
+
+
+/**
+  ******************************************************************************
+  * @section    Test
+  * @author  xlh
+  * @brief   
+  ******************************************************************************
+  */
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TEST @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+//#define CAN_TEST
+
+#ifdef CAN_TEST
+
+
+
+/**
   * @brief  	To print the CAM receive message data which is sending. 
 							IF you need to receive CAN messages and use them to do something. Add it in this function
   * 
@@ -87,45 +126,6 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		
 	}
 }
-
-
-/**
-  * @brief  	Print the CAN frame your just received through interruption.
-  * 
-  * @param    None
-  * @Note			Must enable RX IT. 
-              And received message in FIFO1, FIFO2 all will active this function 
-  * @retval	 	None
-	* @Author   lhx
-  */ 
-
-void CAN1_RX0_IRQHandler(void)
-{
-	MSG(" CR - ");
-	HAL_CAN_IRQHandler(&hcan1);
-}
-
-
-void USB_HP_CAN1_TX_IRQHandler(void)
-{
-	MSG(" CT\r\n");
-	HAL_CAN_IRQHandler(&hcan1);
-}
-
-
-
-/**
-  ******************************************************************************
-  * @section    Test
-  * @author  xlh
-  * @brief   
-  ******************************************************************************
-  */
-/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TEST @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-
-#define CAN_TEST
-
-#ifdef CAN_TEST
 
 /**
  * @author lhx

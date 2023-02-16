@@ -16,6 +16,8 @@
 
 #include "FSR.h"
 
+#include "usb_device.h"
+
 //#include "func_1912.h"
 
 #include "hard_test.h"
@@ -41,8 +43,11 @@
 #include "func_spi.h"
 #include "func_BLE_HC05.h"
 
+#include "Tmotor.h"
 
 #include "win.h"
+
+#include "func_RMDmotor.h"
 
 
 #endif /* __MAIN_H */

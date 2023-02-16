@@ -61,6 +61,8 @@ void CANHandle_Init_500K(uint32_t mode)
 		;
 	}
 }
+
+
 /**
   * @brief CAN Hardware Configuration. bps set and mode set
   * @param mode: CAN_MODE_NORMAL/CAN_MODE_LOOPBACK
@@ -187,7 +189,7 @@ void CAN_ITDISEnable(void)
 void MX_CAN1_Init(uint32_t mode)
 {
 	MSG_BSTART("can1","conf");
-	CANHandle_Init_125K(mode);
+	CANHandle_Init_500K(mode);
 	CanFilter_Init(&hcan1, CAN_FILTER_FIFO0);
 	CAN_ITEnable();
 	MSG_ASTART("can1","conf");
